@@ -2,16 +2,16 @@
 	<view class="h-100">
 		
 		<view class="h-100 d-flex">
-			<view class="left line-h h-100">
-				<view class="font-28 color6 py-3 li" @click="changeLeft(0)" :class="leftCurr==0?'on':''">为您推荐</view>
-				<view class="font-28 color6 py-3 li" @click="changeLeft(1)" :class="leftCurr==1?'on':''">包月鲜花</view>
-				<view class="font-28 color6 py-3 li" @click="changeLeft(2)" :class="leftCurr==2?'on':''">礼品花束</view>
-				<view class="font-28 color6 py-3 li" @click="changeLeft(3)" :class="leftCurr==3?'on':''">绿植多肉</view>
-				<view class="font-28 color6 py-3 li" @click="changeLeft(4)" :class="leftCurr==4?'on':''">应季鲜花</view>
-				<view class="font-28 color6 py-3 li" @click="changeLeft(5)" :class="leftCurr==5?'on':''">盆栽绿植</view>
-				<view class="font-28 color6 py-3 li" @click="changeLeft(6)" :class="leftCurr==6?'on':''">鲜花周边</view>
-				<view class="font-28 color6 py-3 li" @click="changeLeft(7)" :class="leftCurr==7?'on':''">开业花篮</view>
-				<view class="font-28 color6 py-3 li" @click="changeLeft(8)" :class="leftCurr==8?'on':''">进口鲜花</view>
+			<view class="left line-h h-100 font-26 color6">
+				<view class="py-3 classLi" @click="changeLeft(0)" :class="leftCurr==0?'on':''">为您推荐</view>
+				<view class="py-3 classLi" @click="changeLeft(1)" :class="leftCurr==1?'on':''">包月鲜花</view>
+				<view class="py-3 classLi" @click="changeLeft(2)" :class="leftCurr==2?'on':''">礼品花束</view>
+				<view class="py-3 classLi" @click="changeLeft(3)" :class="leftCurr==3?'on':''">绿植多肉</view>
+				<view class="py-3 classLi" @click="changeLeft(4)" :class="leftCurr==4?'on':''">应季鲜花</view>
+				<view class="py-3 classLi" @click="changeLeft(5)" :class="leftCurr==5?'on':''">盆栽绿植</view>
+				<view class="py-3 classLi" @click="changeLeft(6)" :class="leftCurr==6?'on':''">鲜花周边</view>
+				<view class="py-3 classLi" @click="changeLeft(7)" :class="leftCurr==7?'on':''">开业花篮</view>
+				<view class="py-3 classLi" @click="changeLeft(8)" :class="leftCurr==8?'on':''">进口鲜花</view>
 			</view>
 			
 			<view class="right h-100 bg-white flexY flex-column flex-1">
@@ -121,7 +121,7 @@
 page{height: 100%;}
 
 .left{width: 180rpx;padding-bottom: 100rpx;}
-.left .li{text-align: center;margin-bottom: 40rpx;}
+.left .classLi{text-align: center;margin-bottom: 40rpx;}
 .left .on{color: #FF6740;position: relative;}
 .left .on::before{content: ''; height: 60rpx;width: 14rpx;border-radius: 7rpx;background-color: #FF6740;position: absolute;left: -7rpx;top: 14rpx;}
 
