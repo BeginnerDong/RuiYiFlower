@@ -23,17 +23,17 @@
 			
 			<view class="p-r color2">
 				<view class="px-3 bB-f5 pb-4">
-					<view class="font-30 pb-3 pt-4 font-w" @click="Router.redirectTo({route:{path:'/pages/user-order/user-order'}})">我的订单</view>
+					<view class="font-30 pb-3 pt-4 font-w">我的订单</view>
 					<view class="d-flex j-sb a-center order">
-						<view class="item font-24 radius10 d-flex j-sb a-center px-3">
+						<view class="item font-24 radius10 d-flex j-sb a-center px-3" @click="Router.redirectTo({route:{path:'/pages/user-order/user-order?id=0'}})">
 							<image src="../../static/images/about-icon2.png" mode=""></image>
 							<view>门店订单</view>
 						</view>
-						<view class="item font-24 radius10 d-flex j-sb a-center px-3">
+						<view class="item font-24 radius10 d-flex j-sb a-center px-3" @click="Router.redirectTo({route:{path:'/pages/user-order/user-order?id=1'}})">
 							<image src="../../static/images/about-icon3.png" mode=""></image>
 							<view>送货订单</view>
 						</view>
-						<view class="item font-24 radius10 d-flex j-sb a-center px-3">
+						<view class="item font-24 radius10 d-flex j-sb a-center px-3" @click="Router.redirectTo({route:{path:'/pages/user-order/user-order?id=2'}})">
 							<image src="../../static/images/about-icon4.png" mode=""></image>
 							<view>包月订单</view>
 						</view>

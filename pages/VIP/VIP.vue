@@ -4,15 +4,15 @@
 		<view class="vipHead pt-3 px-3 p-r bg-black">
 			<view class="lq font-26 radiusR-1" @click="yesShow">领取会员</view>
 			<!-- 非会员 -->
-			<!-- <view class="p-r noVip">
+			<view class="p-r noVip">
 				<image src="../../static/images/vip-icon7.png" ></image>
 				<view class="p-aXY py-3 px-4 color2 font-24 line-h w-70">
 					<view class="pb-5"><text class="font-40 font-w">会员VIP</text> 专享会员权益</view>
 					<view>领取会员享受更多优惠</view>
 				</view>
-			</view> -->
+			</view>
 			<!-- 会员 -->
-			<view class="p-r yesVip">
+			<!-- <view class="p-r yesVip">
 				<image src="../../static/images/vip-icon7.png" ></image>
 				<view class="p-aXY p-4 color2 font-24 line-h d-flex">
 					<image src="../../static/images/vip-img.png" class="vipImg"></image>
@@ -24,7 +24,7 @@
 						</view>
 					</view>
 				</view>
-			</view>
+			</view> -->
 		</view>
 		
 		<view class="p-r vipBox">

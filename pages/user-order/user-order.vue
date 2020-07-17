@@ -159,6 +159,10 @@
 				liCurr:0
 			}
 		},
+		onLoad(option){
+			const self = this;
+			self.orderLiCurr = option.id;
+		},
 		methods: {
 			changeOrderLi(i){
 				const self = this;
