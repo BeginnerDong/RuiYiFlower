@@ -10,6 +10,11 @@ export default {
             if(res){
                 obj.data.refreshToken=false;
             };
+			console.log('sTokenAfter',obj);
+			console.log('res.info.user_no',res);
+			if(obj.data.sTokenAfter){
+				obj.data.searchItem[obj.data.sTokenAfter] = res.info.user_no;
+			};
             self.HTTP(obj);
         };
         if(obj.data.tokenFuncName){

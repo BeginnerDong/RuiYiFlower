@@ -44,6 +44,9 @@ class Token {
 				token_name:'user_token'
 	        };
 			console.log('getProjectToken',callback)
+			if(postData&&postData.parent_no){
+				params.parent_no = postData.parent_no
+			};
 			if(callback){
 				this.getUserInfo(params,callback);
 			}else{
@@ -265,19 +268,35 @@ class Token {
         
     }
     
-    getMerchantToken(callback,postData) { 
-        if((postData&&postData.refreshToken)||!uni.getStorageSync('merchant_token')){
-            uni.removeStorageSync('merchant_token');
-            uni.removeStorageSync('merchant_info');
-            uni.redirectTo({
-              url: '/pages/login/login'
-            });
+    getStaffToken(callback,postData) { 
+        if((postData&&postData.refreshToken)||!uni.getStorageSync('staffToken')){
+            uni.removeStorageSync('staffToken');
+            uni.removeStorageSync('staffInfo');
+			$Utils.showToast('登录状态失效，请重新登录','none')
+			setTimeout(function() {
+				uni.reLaunch({
+				  url: '/pages/user/user'
+				});
+			}, 1000);
         }else{
-            return uni.getStorageSync('merchant_token');
+            return uni.getStorageSync('staffToken');
         }
     }
    
-
+	getRiderToken(callback,postData) {
+	    if((postData&&postData.refreshToken)||!uni.getStorageSync('riderToken')){
+	        uni.removeStorageSync('riderToken');
+	        uni.removeStorageSync('riderInfo');
+			$Utils.showToast('登录状态失效，请重新登录','none')
+			setTimeout(function() {
+				uni.reLaunch({
+				  url: '/pages/user/user'
+				});
+			}, 1000);
+	    }else{
+	        return uni.getStorageSync('riderToken');
+	    }
+	}
 
     getUserInfo(params,callback){
         var self = this;
@@ -335,10 +354,15 @@ class Token {
                 postData.thirdapp_id = params.thirdapp_id;  
                 
                 postData.code = res.code;
-                if(wxUserInfo.nickName&&wxUserInfo.avatarUrl){
-                    postData.nickname = wxUserInfo.nickName;
-                    postData.headImgUrl = wxUserInfo.avatarUrl;
+				if(params.parent_no){
+					postData.parent_no = params.parent_no
+				};
+                if(wxUserInfo.nickName){
+                    postData.nickname = wxUserInfo.nickName;       
                 };
+				if(wxUserInfo.avatarUrl){
+				    postData.headImgUrl = wxUserInfo.avatarUrl;
+				};
                 if(self.g_params&&self.g_params.parent_no){
                     postData.parent_no = self.g_params.parent_no;
                     console.log(self.g_params)
@@ -365,7 +389,7 @@ class Token {
 							uni.setStorageSync('token_get_time',0);
                             
                             if(callback){
-                                callback && callback(res.data.token);
+                                callback && callback(res.data);
                             };      
                         }else{
                             uni.showToast({

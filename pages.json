@@ -23,6 +23,7 @@
         }
         ,{
             "path" : "pages/classify/classify",
+			"onReachBottomDistance":200,
             "style" : {
 							"navigationBarTitleText": "分类"
 						}

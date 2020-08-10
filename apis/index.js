@@ -188,6 +188,19 @@ export default {
 		};
 		http.HTTP(allParams);
 	},
+	
+	commonUserGet(param, callback) {
+		var allParams = {
+			url: 'Common/User/get',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
 	userUpdate(param, callback) {
 		var allParams = {
 			url: 'Base/User/update',
@@ -317,10 +330,23 @@ export default {
 		http.HTTP(allParams);
 	},
 
-	shopLogin(param, callback) {
+	staffLogin(param, callback) {
 
 		var allParams = {
 			url: 'Func/Common/loginByShop',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	riderLogin(param, callback) {
+	
+		var allParams = {
+			url: 'Func/Common/loginByRider',
 			type: 'post',
 			data: param,
 			sCallback: function(data) {
@@ -405,6 +431,30 @@ export default {
 	userCouponGet(param, callback) {
 		var allParams = {
 			url: 'Common/UserCoupon/get',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	couponGet(param, callback) {
+		var allParams = {
+			url: 'Common/Coupon/get',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	couponAdd(param, callback) {
+		var allParams = {
+			url: 'Func/Coupon/addCoupon',
 			type: 'post',
 			data: param,
 			sCallback: function(data) {

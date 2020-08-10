@@ -6,71 +6,132 @@
 				<view class="orderLi borderM radiusR" :class="orderLiCurr==1?'on':''" @click="changeOrderLi(1)">送货上门</view>
 			</view>
 		</view>
-		<view class="bg-white line-h p-r pb-1 mb-2">
-			<view class="p-3 line-h d-flex a-center j-sb p-r" @click="Router.redirectTo({route:{path:'/pages/user-store/user-store'}})">
-				<view>
-					<view class="pb-3">张三 15684279536</view>
-					<view>陕西省西安市长安区韦曲街道</view>
+		<view class="bg-white line-h p-r pb-1 mb-2"  v-show="orderLiCurr==0">
+			<view class="p-3 line-h d-flex a-center j-sb p-r" @click="Router.navigateTo({route:{path:'/pages/user-store/user-store'}})">
+				<view v-if="shopData.address">
+					<view class="pb-3">{{shopData.name}} {{shopData.phone}}</view>
+				 	<view>{{shopData.address}}</view>
+				</view>
+				<view v-else>
+					<view class="">请选择自提门店</view>
 				</view>
 				<image src="../../static/images/detailsl-icon2.png" class="R-icon"></image>
 			</view>
-			<view class="flex1 px-3 font-24 text-center pb-2 zt" v-show="orderLiCurr==0">
-				<input type="text" value="" placeholder="姓名" />
-				<input type="text" value="" placeholder="电话" />
+			<view class="flex1 px-3 font-24 text-center pb-2 zt">
+				<input type="text" v-model="orderInfo.name" placeholder="姓名" />
+				<input type="number" v-model="orderInfo.phone" maxlength="11" placeholder="电话" />
 			</view>
 			<image src="../../static/images/the orderl-icon.png" class="zt-icon p-a bottom-0 left-0 right-0"></image>
 		</view>
 		
-		<view class="bg-white px-3 mb-2">
+		<view class="bg-white line-h p-r pb-1 mb-2"  v-show="orderLiCurr==1">
+			<view class="p-3 line-h d-flex a-center j-sb p-r" @click="Router.navigateTo({route:{path:'/pages/user-address/user-address'}})">
+				<view v-if="addressData.name">
+					<view class="pb-3">{{addressData.name}} {{addressData.phone}}</view>
+				 	<view>{{addressData.city+addressData.detail}}</view>
+				</view>
+				<view v-else>
+					<view class="">选择收货地址</view>
+				</view>
+				<image src="../../static/images/detailsl-icon2.png" class="R-icon"></image>
+			</view>
+			<image src="../../static/images/the orderl-icon.png" class="zt-icon p-a bottom-0 left-0 right-0"></image>
+		</view>
+		
+		<view class="bg-white px-3 mb-2" v-for="(item,index) in mainData" :key="index">
 			<view class="py-3 d-flex a-center j-sb bB-f5">
-				<image src="../../static/images/shopping-img.png" class="shopImg"></image>
+				<image  :src="item.product&&item.product.mainImg&&item.product.mainImg[0]?item.product.mainImg[0].url:''" class="shopImg"></image>
 				<view class="shopCon d-flex flex-column">
-					<view class="tit avoidOverflow pb-2">哼唱幸福 11枝粉色扶郎花束</view>
-					<view class="d-flex"><view class="font-24 carSpan mb-5 color6 px-1">精品大束</view></view>
-					<view class="price">38.6</view>
+					<view class="tit avoidOverflow pb-2">{{item.product&&item.product.title?item.product.title:''}}</view>
+					<view class="d-flex"><view class="font-24 carSpan mb-5 color6 px-1">
+					{{item.product&&item.product.sku&&item.product.sku[item.skuIndex]?item.product.sku[item.skuIndex].title:''}}
+					</view></view>
+					<view class="price">{{item.product&&item.product.sku&&item.product.sku[item.skuIndex]?item.product.sku[item.skuIndex].price:''}}</view>
 				</view>
 			</view>
 			<view class="d-flex a-center j-sb py-3">
 				<view>购买数量</view>
 				<view class="b-e1 d-flex a-center count">
-					<image src="../../static/images/shopping-icon2.png" class="count-icon1"></image>
-					<view class="num bL-e1 bR-e1 text-center">1</view>
-					<image src="../../static/images/shopping-icon3.png" class="count-icon2"></image>
+					<image src="../../static/images/shopping-icon2.png" @click="counter(index,'-')" class="count-icon1"></image>
+					<view class="num bL-e1 bR-e1 text-center">{{item.count}}</view>
+					<image src="../../static/images/shopping-icon3.png" @click="counter(index,'+')" class="count-icon2"></image>
 				</view>
 			</view>
 		</view>
 		
 		<view class="bg-white px-3">
-			<view class="py-3 bB-f5 flex1">
+			<view class="py-3 bB-f5 flex1" v-show="orderLiCurr==1">
 				<view>运费</view>
-				<view class="font-24 color6">快递费￥0</view>
+				<view class="font-24 color6">￥{{delivery}}</view>
 			</view>
 			<view class="py-3 flex1">
 				<view>支付方式</view>
-				<view class="font-24 flex0">
-					<image src="../../static/images/shopping-icon.png" class="shop-icon"></image>
+				<view class="font-24 flex0" @click="changePayType(2)" v-show="orderLiCurr==1&&firstTime==0">
+					<image :src="payType==2?'../../static/images/shopping-icon.png':'../../static/images/shopping-icon1.png'" class="shop-icon"></image>
+					<view class="pl-1">线下支付</view>
+				</view>
+				<view class="font-24 flex0" @click="changePayType(1)">
+					<image :src="payType==1?'../../static/images/shopping-icon.png':'../../static/images/shopping-icon1.png'" class="shop-icon"></image>
 					<view class="pl-1">立即支付</view>
+				</view>
+			</view>
+			<view class="py-3 flex1" v-if="firstTime>0">
+				<view>第一次收花时间</view>
+				<view class="font-24" style="color:#FF6740">{{Utils.timeto(firstTime*1000,'ymd')}}</view>
+			</view>
+			
+			<view class="py-3 bB-f5 flex1">
+				<view>优惠券</view>
+				<view class="d-flex j-end a-center color6 font-26" v-if="couponData.length==0" @click="couponShow">
+					暂无优惠券使用
+					
+				</view>
+				<view class="d-flex j-end a-center color6 font-26" v-if="couponData.length>0&&chooseCoupon.length==0" @click="couponShow">
+					{{couponData.length}}张优惠券可用
+					
+				</view>
+				<view class="d-flex j-end a-center color6 font-26" v-if="couponData.length>0&&chooseCoupon.length>0" @click="couponShow">
+					优惠券抵扣-{{pay.coupon[0].price}}
+					
 				</view>
 			</view>
 		</view>
 		
 		
-		
+		<view style="height: 120rpx;width: 100%;"></view>
 		<view class="bg-white p-f left-0 right-0 d-flex carBot">
-			<view class="font-22 d-flex a-center flex-1 px-3">合计 <text class="price font-30">79</text></view>
-			<view class="carBtn" @click="Router.redirectTo({route:{path:'/pages/car-order/car-order'}})">确认订单</view>
+			<view class="font-22 d-flex a-center flex-1 px-3">合计 <text class="price font-30">{{totalPrice}}</text></view>
+			<button style="border-radius: 0;font-size: 15px;" class="carBtn" open-type="getUserInfo"  @getuserinfo="Utils.stopMultiClick(submit)">确认订单</button>
 		</view>
 		
 		
 		<!-- 充值免费领弹窗 -->
-		<!-- <view class="bg-mask">
+		<view class="bg-mask" v-show="free_show">
 			<view class="exec p-aXY m-a bg-white radius20 font-30 color2 flex5 pb-5">
 				<view class="py-5">充值免费领</view>
 				<image src="../../static/images/img.png" class="lb"></image>
 				<view class="btn690">立即充值</view>
-				<image src="../../static/images/detailsl-icon4.png" class="x-icon p-a top-0 right-0 m-3"></image>
+				<image src="../../static/images/detailsl-icon4.png" class="x-icon p-a top-0 right-0 m-3" @click="freeShow"></image>
 			</view>
-		</view> -->
+		</view>
+		
+		<view class="black-bj" v-show="is_show"></view>
+		<view class="couponShow whiteBj radius10" v-show="is_couponShow">
+			<view class="d-flex j-sb px-3 py-3 border-bottom">
+				<view class="font-26 color9" @click="couponShow">取消</view>
+				<view class="">优惠券</view>
+				<view class="font-26 main-text-color"  @click="useCoupon">确定</view>
+			</view>
+			
+			
+			<view class="pt-1 font-26">
+				<view class="item d-flex j-sb a-center px-3 mt-3" v-for="(item,index) in couponData" :key="index" 
+				@click="couponChange(index)">
+					<view>满{{item.condition}}减{{item.value}}元</view>
+					<view class="seltIcon"><image :src="couponCurr==index?'../../static/images/shopping-icon.png':'../../static/images/shopping-icon1.png'" mode=""></image></view>
+				</view>
+			</view>
+		</view>
 		
 	</view>
 </template>
@@ -80,14 +141,478 @@
 		data() {
 			return {
 				Router:this.$Router,
-				orderLiCurr:0
+				orderLiCurr:0,
+				free_show:false,
+				shopData:{},
+				addressData:{},
+				mainData:[],
+				totalPrice:0,
+				orderInfo:{
+					name:'',
+					phone:''
+				},
+				delivery:0,
+				Utils:this.$Utils,
+				firstTime:0,
+				logArray:[],
+				payType:1,
+				pay:{
+					coupon:[]
+				},
+				couponData:[],
+				chooseCoupon:[],
+				is_couponShow:false,
+				is_show:false,
+				couponCurr:-1,
 			}
 		},
+		
+		onLoad(options) {
+			const self = this;
+			uni.showLoading();
+			//self.$Utils.loadAll(['getUserData'], self);
+			
+			const callback = (res) => {
+				self.$Utils.loadAll(['getUserData','getUserCouponData'], self);
+				self.mainData = uni.getStorageSync('payPro');
+				//self.countTotalPrice()
+				if(options.week&&options.week>0){
+					self.week = options.week
+					self.creatLog()
+				};
+			};
+			self.$Token.getProjectToken(callback, {
+				refreshToken: true
+			})
+		},
+		
+		onShow() {
+			const self = this;
+			if(uni.getStorageSync('choosedAddressData')){
+				self.addressData = uni.getStorageSync('choosedAddressData')
+			}else{
+				self.getAddressData()
+			};
+			if(uni.getStorageSync('choosedShopData')){
+				self.shopData = uni.getStorageSync('choosedShopData')
+			}
+		},
+		
 		methods: {
+			
+			counter(index, type) {
+				const self = this;
+				if (type == '+') {
+					self.mainData[index].count++;
+				} else {
+					if (self.mainData[index].count > 1) {
+						self.mainData[index].count--;
+					}
+				};
+				self.countTotalPrice();
+			},
+			
+			getUserCouponData() {
+				const self = this;
+				var now = Date.parse(new Date());
+				const postData = {};
+				postData.tokenFuncName = 'getProjectToken';
+				postData.searchItem = {
+					use_step: 1,
+					//pay_status:1,
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.couponData.push.apply(self.couponData, res.info.data)
+					}
+					self.$Utils.finishFunc('getUserCouponData');
+				};
+				self.$apis.userCouponGet(postData, callback);
+			},
+			
+			useCoupon() {
+				const self = this;	
+				self.couponTotalPrice = self.$Utils.addItemInArray(self.pay.coupon, 'price');
+			/* 	console.log(index)
+				console.log(self.couponData);
+				console.log(self.couponData[0]); */
+				for (var i = 0; i < self.mainData.length; i++) {
+					self.totalPrice += self.mainData[i].product.sku[self.mainData[i].skuIndex].price*self.mainData[i].count
+				};
+				
+				if(self.couponData[self.couponCurr]&&self.couponData[self.couponCurr].id){
+					var id = self.couponData[self.couponCurr].id;
+				}else{
+					self.pay.coupon = []
+					self.chooseCoupon = [];
+					self.is_show = !self.is_show;
+					self.is_couponShow = !self.is_couponShow;
+					self.countTotalPrice();
+					console.log('self.pay',self.pay)
+					return
+				}
+				
+				var findCoupon = self.$Utils.findItemInArray(self.couponData, 'id', id);
+				var findItem = self.$Utils.findItemInArray(self.pay.coupon, 'id', id);
+				console.log('findCoupon', findCoupon)
+				self.showCoupon = false;
+				
+				if (findCoupon) {
+					findCoupon = findCoupon[1];
+					var findSameCoupon =  self.$Utils.findItemsInArray(self.pay.coupon, 'product_id', id);
+				} else {
+					self.$Utils.showToast('优惠券错误', 'none');
+					return;
+				};
+				if (findItem) {
+					self.is_show = !self.is_show;
+					self.is_couponShow = !self.is_couponShow;
+					self.countTotalPrice();
+					console.log('self.pay',self.pay)
+					return
+				} else {
+					if ((self.totalPrice - self.couponTotalPrice) < findCoupon.condition) {
+						self.$Utils.showToast('未达满减标准', 'none');				
+						return;
+					};			
+					self.pay = {
+						coupon:[]
+					};
+					console.log('findSameCoupon.length', findSameCoupon.length)
+					if (self.pay.coupon.length >= 1) {
+						self.$Utils.showToast('叠加使用超限', 'none');
+					
+						return;
+					};
+					
+					if (findCoupon.type == 1) {
+						var couponPrice = findCoupon.value;
+						console.log('findCoupon.discount', findCoupon.discount)
+					} else if (findCoupon.type == 2) {
+						
+						var couponPrice = parseFloat(self.totalPrice).toFixed(2) - parseFloat(findCoupon.discount / 100 * self.totalPrice)
+							.toFixed(2);
+					};
+					/* if (parseFloat(couponPrice) + parseFloat(self.couponTotalPrice) > parseFloat(self.totalPrice)) {
+						couponPrice = parseFloat(self.totalPrice).toFixed(2) - parseFloat(self.couponTotalPrice).toFixed(2);
+					}; */
+					self.pay.coupon.push({
+						id: id,
+						price: couponPrice.toFixed(2),
+					});
+					self.chooseCoupon.push({
+						id: id,
+						price: couponPrice,
+					});
+				};
+				self.is_show = !self.is_show;
+				self.is_couponShow = !self.is_couponShow;
+				self.countTotalPrice();
+			},
+			
+			couponChange(index){
+				const self = this;
+				if(self.couponCurr!=index){
+					self.couponCurr = index;
+				}else{
+					self.couponCurr = -1
+				}
+			},
+			
+			couponShow(){
+				const self = this;
+				self.is_show = !self.is_show;
+				self.is_couponShow = !self.is_couponShow;
+			},
+			
+			freeShow(){
+				const self = this;
+				self.free_show = !self.free_show;
+			},
+			
+			changePayType(type){
+				const self = this;
+				self.payType  = type
+			},
+			
+			creatLog(){
+				const self = this;
+				//console.log('creatLog',self.week);
+				var now = new Date();
+				var today = new Date(new Date().toLocaleDateString()).getTime()/1000;
+				console.log(today)
+				var day = now.getDay();
+				if(day==self.week){
+					self.firstTime  = today+86400*7
+				}else if(day>self.week){
+					var num = 7-(parseInt(day)-parseInt(self.week));
+					self.firstTime  = today+86400*num
+				}else if(day<self.week){
+					var num = parseInt(self.week)-parseInt(day);
+					self.firstTime  = today+86400*num
+				};
+				self.endTime = self.firstTime + 86400*7*(self.mainData[0].product.sku[self.mainData[0].skuIndex].score-1)
+				console.log(self.endTime)
+				for (let i = 0; i < self.endTime - self.firstTime + 86400*7; i+= 86400*7) {
+				  self.logArray.push(i + self.firstTime)
+				};
+				console.log('self.logArray',self.logArray)
+			},
+			
+			submit(){
+				const self = this;
+				uni.setStorageSync('canClick', false);
+				if(self.orderLiCurr==0){
+					if (JSON.stringify(self.shopData) == '{}') {
+						uni.setStorageSync('canClick', true);
+						self.$Utils.showToast('请选择自提门店', 'none', 1000)
+						return;
+					}
+					if(self.orderInfo.name==''||self.orderInfo.phone==''){
+						uni.setStorageSync('canClick', true);
+						self.$Utils.showToast('请填写提货人信息','none')
+						return
+					}
+					if (self.orderInfo.phone.trim().length != 11 || !/^1[3|4|5|6|7|8|9]\d{9}$/.test(self.orderInfo.phone)) {
+						uni.setStorageSync('canClick', true);
+						self.$Utils.showToast('请输入正确的手机号', 'none', 1000)
+						return;
+					}
+				}else{
+					if(JSON.stringify(self.addressData) == '{}'){
+						uni.setStorageSync('canClick', true);
+						self.$Utils.showToast('请选择收货地址','none')
+						return
+					}
+				};
+				var orderList = []
+				/* for (var i = 0; i < self.mainData.length; i++) {
+					orderList.push({product_id:self.mainData[i].product_id,count:self.mainData[i].count,type:self.mainData[i].type})
+				} */
+				var data = {};
+				for (var i = 0; i < self.mainData.length; i++) {
+					orderList.push({sku_id:self.mainData[i].sku_id,count:self.mainData[i].count,data: data,
+					snap_address: self.addressData})
+				}
+				const callback = (user, res) => {
+					self.free_show = !self.free_show;
+					self.addOrder(orderList)
+				};
+				self.$Utils.getAuthSetting(callback);
+			},
+			
+			addOrder(orderList) {
+				const self = this;	
+				
+				/* if(self.orderId){
+					self.goPay()
+					return
+				}; */
+				const postData = {}; 
+				postData.orderList = self.$Utils.cloneForm(orderList);
+				postData.data = {
+					level:1,
+					price:self.pay.wxPay.price,
+					pay_type:self.payType
+				};
+				postData.type = 1;
+				postData.parent = 1;
+				postData.tokenFuncName = 'getProjectToken';
+				if(self.orderLiCurr==0){
+					postData.data.name = self.orderInfo.name
+					postData.data.phone = self.orderInfo.phone
+					postData.data.shop_no = self.shopData.user_no
+					postData.data.transport_type = 2
+				}else{
+					postData.data.snap_address = self.addressData
+					postData.data.transport_type = 1
+				};
+				if(self.week){
+					postData.type = 2
+				};
+				const callback = (res) => {
+					uni.setStorageSync('canClick', true);
+					if (res && res.solely_code == 100000) {
+						self.orderId = res.info.id;
+						var array = self.$Utils.getStorageArray('cartData');
+						for (var i = 0; i < orderList.length; i++) {
+							for (var j = 0; j < array.length; j++) {
+								if(orderList[i].sku_id == array[j].sku[array[j].skuIndex].id){
+									self.$Utils.delStorageArray('cartData', orderList[i], 'id');
+								}
+							}
+						};
+						if(self.payType==2){
+							uni.showToast({
+								title: '下单成功',
+								duration: 1000,
+								success: function() {
+									
+								}
+							});
+							setTimeout(function() {
+								self.$Router.redirectTo({route:{path:'/pages/user-order/user-order?id=1'}})
+							}, 1000);
+							return
+						};
+						self.goPay()
+					} else {		
+						uni.showToast({
+							title: res.msg,
+							duration: 2000
+						});
+					};		
+				};
+				self.$apis.addOrder(postData, callback);
+			},
+			
+			goPay() {
+				const self = this;	
+				const postData = self.$Utils.cloneForm(self.pay);	
+				postData.tokenFuncName = 'getProjectToken',
+				postData.searchItem = {
+					id: self.orderId
+				};
+				postData.payAfter = [];
+				if(self.logArray.length>0){
+					for (var i = 0; i < self.logArray.length; i++) {
+						postData.payAfter.push({
+							tableName: 'Log',
+							FuncName: 'add',
+							data: {
+								type:1,
+								relation_table:'Order',
+								behavior:0,
+								relation_id:self.orderId,
+								passage:self.logArray[i],
+								thirdapp_id:2,
+								user_no:uni.getStorageSync('user_info').user_no
+							},
+						});
+					}
+				};
+				const callback = (res) => {
+					if (res.solely_code == 100000) {
+						uni.setStorageSync('canClick', true);
+					
+						if (res.info) {
+							const payCallback = (payData) => {
+								console.log('payData', payData)
+								if (payData == 1) {
+									uni.showToast({
+										title: '支付成功',
+										duration: 1000,
+										success: function() {
+											
+										}
+									});
+									setTimeout(function() {
+										self.$Router.redirectTo({route:{path:'/pages/user-order/user-order?id=1'}})
+									}, 1000);
+								} else {
+									uni.setStorageSync('canClick', true);
+									uni.showToast({
+										title: '支付失败',
+										duration: 2000
+									});
+								};
+							};
+							self.$Utils.realPay(res.info, payCallback);
+						} else {
+							
+							uni.showToast({
+								title: '支付成功',
+								duration: 1000,
+								success: function() {
+									
+								}
+							});
+							setTimeout(function() {
+								self.$Router.redirectTo({route:{path:'/pages/user-order/user-order?id=1'}})
+							}, 1000);
+						};
+					} else {
+						uni.setStorageSync('canClick', true);
+						uni.showToast({
+							title: res.msg,
+							duration: 2000
+						});
+					};
+				};
+				self.$apis.pay(postData, callback);
+			},
+			
+			getUserData() {
+				const self = this;
+				const postData = {
+					searchItem:{thirdapp_id:2}
+				};
+				postData.tokenFuncName = 'getProjectToken'
+				postData.searchItem.user_no = uni.getStorageSync('user_info').user_no;
+				const callback = (res) => {
+					if (res.solely_code == 100000 && res.info.data[0]) {
+						self.userData = res.info.data[0];
+						self.delivery_fee = uni.getStorageSync('user_info').thirdApp.delivery_fee;
+						self.delivery_standard = uni.getStorageSync('user_info').thirdApp.delivery_standard;
+						self.countTotalPrice()
+					} else {
+						self.$Utils.showToast(res.msg, 'none')
+					};
+					self.$Utils.finishFunc('getUserData');
+				};
+				self.$apis.userGet(postData, callback);
+			},
+			
 			changeOrderLi(i){
 				const self = this;
-				self.orderLiCurr = i
-			}
+				self.orderLiCurr = i;
+				self.countTotalPrice()
+			},
+			
+			getAddressData() {
+				const self = this;		
+				const postData = {};
+				postData.tokenFuncName = 'getProjectToken';
+				postData.searchItem = {
+					isdefault:1
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.addressData = res.info.data[0];
+					}
+				};
+				self.$apis.addressGet(postData, callback);
+			},
+			
+			countTotalPrice() {
+				const self = this;
+				self.totalPrice = 0;
+				self.couponTotalPrice = self.$Utils.addItemInArray(self.pay.coupon, 'price');
+				for (var i = 0; i < self.mainData.length; i++) {
+					self.totalPrice += self.mainData[i].product.sku[self.mainData[i].skuIndex].price*self.mainData[i].count
+				}
+				self.totalPrice = (parseFloat(self.totalPrice) - parseFloat(self.couponTotalPrice)).toFixed(2)
+				console.log('self.delivery_standard',self.delivery_standard)
+				console.log('self.totalPrice',self.totalPrice)
+				
+				if(parseFloat(self.delivery_standard)>self.totalPrice&&self.orderLiCurr==1){
+					console.log('self.delivery_fee',self.delivery_fee)
+					self.delivery = self.delivery_fee;
+					self.totalPrice = (parseFloat(self.totalPrice)+parseFloat(self.delivery_fee)).toFixed(2)
+				}else{
+					self.delivery = 0;
+					self.totalPrice = parseFloat(self.totalPrice).toFixed(2)
+				};
+				//console.log('wxPay',wxPay)
+				if (self.totalPrice > 0) {
+					self.pay.wxPay = {
+						price: self.totalPrice,
+					};
+				} else {
+					  delete self.pay.wxPay;	 
+				};
+				console.log(self.pay)
+			},
 		}
 	}
 </script>
@@ -110,4 +635,7 @@
 .btn690{width: 480rpx;margin: 0;}
 
 .R-icon{margin: 30rpx;margin-right: 0;}
+.couponShow{width: 100%;position: fixed;left: 0;right: 0;bottom: 0;height:500rpx;z-index: 50;padding-bottom: 80rpx;}
+	.seltIcon{width: 36rpx;height: 36rpx;}
+	.black-bj,.black-bj2 {background: #000;opacity: 0.5;position: fixed;left: 0;top: 0;right: 0;bottom: 0;z-index: 40; }
 </style>
