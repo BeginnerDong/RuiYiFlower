@@ -154,6 +154,12 @@
 							"navigationBarTitleText": "自提入口"
 						}
         }
+        ,{
+            "path" : "pages/user-orderComment/user-orderComment",
+            "style" : {
+							"navigationBarTitleText": "评论"
+						}
+        }
     ],
 	"globalStyle": {
 		//"navigationStyle":"custom",

@@ -20,7 +20,8 @@
 		</view>
 
 		<view class="bg-white mx-3 px-2 mt-2">
-			<view class="py-3 d-flex a-center j-sb" v-for="(item,index) in mainData.child" :key="index">
+			<view class="py-3 d-flex a-center j-sb" v-for="(item,index) in mainData.child" :key="index"
+			@click="Router.navigateTo({route:{path:'/pages/user-orderComment/user-orderComment'}})">
 				<image :src="item.orderItem&&item.orderItem[0]&&item.orderItem[0].snap_product&&item.orderItem[0].snap_product.product&&
 								item.orderItem[0].snap_product.product.mainImg&&item.orderItem[0].snap_product.product.mainImg[0]?item.orderItem[0].snap_product.product.mainImg[0].url:''"
 				 class="shopImg"></image>
