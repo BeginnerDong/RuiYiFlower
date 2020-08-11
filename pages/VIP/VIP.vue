@@ -143,8 +143,13 @@
 		onLoad() {
 			const self = this;
 			if(uni.getStorageSync('user_token')){
-				self.getUserData()
-				self.$Utils.loadAll(['getMainData'], self);
+				const callback = (res) => {
+					
+					self.$Utils.loadAll(['getMainData'], self);
+				};
+				self.$Token.getProjectToken(callback, {
+					refreshToken: true,
+				})	
 			}else{
 				self.showAll = true
 			}
@@ -266,6 +271,7 @@
 					if (res.info.data.length > 0) {
 						self.mainData.push.apply(self.mainData, res.info.data);
 					}
+					self.getUserData()
 					console.log('self.mainData', self.mainData)
 					self.$Utils.finishFunc('getMainData');
 				};
