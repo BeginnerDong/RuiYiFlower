@@ -59,6 +59,9 @@
 				<view>共{{mainData.child?mainData.child.length:''}}件商品</view>
 				<view>合计：<text class="price font-28">{{mainData.price}}</text></view>
 			</view>
+			<view class="d-flex j-end pb-2">
+				<view class="tkBtn b-e1 radius10">申请退款</view>
+			</view>
 			<!-- <view class="pb-3">支付方式：<text class="colorR">线下支付</text></view> --><!-- 包月订单显示 -->
 			<view class="pb-3">订单编号：{{mainData.order_no}}</view>
 			<view>下单时间：{{mainData.create_time}}</view>
@@ -182,6 +185,12 @@
 	.hxEwm {
 		width: 80rpx;
 		height: 80rpx;
+	}
+	
+	.tkBtn {
+		width: 140rpx;
+		line-height: 54rpx;
+		text-align: center;
 	}
 	
 	.hxEwm image {

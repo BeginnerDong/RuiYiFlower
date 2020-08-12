@@ -44,7 +44,6 @@
 
 <style scoped>
 	textarea{display: block;width: 100%;}
-.wh120{width: 120rpx;height: 120rpx;margin-right: 20rpx;}
 .btn690{width: 100%;margin: 220rpx 0 20rpx;}
 .orderImg {width: 125rpx;height: 125rpx;border-radius: 10rpx;margin-right: 20rpx;}
 .txt{height: 125rpx;}

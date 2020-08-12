@@ -22,6 +22,10 @@ uni-button:after{border: 0;}
 .w-70{width: 70%;}
 .w-90{width: 90%;}
 
+
+.wh120{width: 120rpx;height: 120rpx;margin-right: 20rpx;}
+.wh60{width: 60rpx;height: 60rpx;}
+
 .f5-2{height: 20rpx;background-color: #f5f5f5;}
 
 /* 无数据 */

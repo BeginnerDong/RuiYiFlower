@@ -54,11 +54,31 @@
 			</view>
 		</view>
 		
-		<view class="p-3 bg-white pb-5 ms">
-			<view class="font-28 color6 pb-3">商品描述</view>
-			<view class="font-24 color2 line-h-md text-center">
-				<view class="content ql-editor" style="padding:0"
-				v-html="mainData.content">
+		<view class="p-3 bg-white pb-5">
+			<view class="font-28 color6 pb-3 d-flex cardBox">
+				<view class="mr-5 pb-2 card" @click="changeCard(0)" :class="titCard==0?'on':''">商品描述</view>
+				<view class="mr-5 pb-2 card" @click="changeCard(1)" :class="titCard==1?'on':''">商品评论</view>
+			</view>
+			<view class="font-24 color2">
+				<view class="content ql-editor line-h-md text-center ms" style="padding:0" v-html="mainData.content" v-show="titCard==0">
+				</view>
+				
+				<view v-show="titCard==1">
+					<view class="bB-f5 pb-2">
+						<view class="d-flex a-center j-sb">
+							<view class="d-flex a-center">
+								<image src="../../static/images/head.png" class="wh60 mr-3"></image>
+								<view>昵称</view>
+							</view>
+							<view class="color6">2020-12-25 12:25:56</view>
+						</view>
+						<view>
+							<view class="py-2">评论内容</view>
+							<view class="flex">
+								<image src="../../static/images/icon5.png" class="wh120"></image>
+							</view>
+						</view>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -139,7 +159,8 @@
 				week:[{value:0,key:'周日收花'},{value:1,key:'周一收花'},{value:2,key:'周二收花'},{value:3,key:'周三收花'},{value:4,key:'周四收花'},{value:5,key:'周五收花'},
 				{value:6,key:'周六收花'},],
 				chooseWeek:-1,
-				deliver:0
+				deliver:0,
+				titCard:0
 			}
 		},
 		
@@ -204,7 +225,10 @@
 		
 		methods: {
 			
-			
+			changeCard(i){
+				const self = this;
+				self.titCard = i;
+			},
 			
 			chooseWeekFunc(index){
 				const self = this;
@@ -368,6 +392,9 @@
 <style scoped>
 .banner .swiper-box{width: 750rpx;height: 750rpx;}
 .banner image{width: 750rpx;height: 750rpx;}
+
+.cardBox .on{position: relative;}
+.cardBox .on::before{content: '';width: 100rpx;height: 5rpx;background-color: #FF6740;position: absolute;bottom: 0;left: 50%;margin-left: -50rpx;}
 
 .ms image{width: 100%;height: 400rpx;margin-top: 40rpx;}
 
