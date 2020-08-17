@@ -65,7 +65,7 @@
 		data() {
 			return {
 				Router:this.$Router,
-				leftCurr:0,
+				leftCurr:-1,
 				menuData:[],
 				searchItem:{
 					thirdapp_id:2,

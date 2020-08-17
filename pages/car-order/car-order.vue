@@ -52,9 +52,13 @@
 			<view class="d-flex a-center j-sb py-3">
 				<view>购买数量</view>
 				<view class="b-e1 d-flex a-center count">
-					<image src="../../static/images/shopping-icon2.png" @click="counter(index,'-')" class="count-icon1"></image>
+					<view class="flex0 px-1 h-100" @click="counter(index,'-')">
+						<image src="../../static/images/shopping-icon2.png" class="count-icon1"></image>
+					</view>
 					<view class="num bL-e1 bR-e1 text-center">{{item.count}}</view>
-					<image src="../../static/images/shopping-icon3.png" @click="counter(index,'+')" class="count-icon2"></image>
+					<view class="flex0 px-1 h-100" @click="counter(index,'+')">
+						<image src="../../static/images/shopping-icon3.png" class="count-icon2"></image>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -110,7 +114,7 @@
 			<view class="exec p-aXY m-a bg-white radius20 font-30 color2 flex5 pb-5">
 				<view class="py-5">充值免费领</view>
 				<image src="../../static/images/img.png" class="lb"></image>
-				<view class="btn690">立即充值</view>
+				<view class="btn690" @click="Router.navigateTo({route:{path:'/pages/VIP-recharge/VIP-recharge'}})">立即充值</view>
 				<image src="../../static/images/detailsl-icon4.png" class="x-icon p-a top-0 right-0 m-3" @click="freeShow"></image>
 			</view>
 		</view>

@@ -100,7 +100,7 @@ uni-button:after{border: 0;}
 .list .on::before{content: '';background-color: #FF6740;width: 30rpx;height: 6rpx;position: absolute;bottom: 0;left: 0;right: 0;margin: auto;}
 
 /* 数量加减 */
-.count{width: 160rpx;}
+.count{width: 150rpx;height: 40rpx;}
 .count .num{width: 70rpx;}
 
 /* 购物车 */

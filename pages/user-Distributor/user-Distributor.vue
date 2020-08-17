@@ -32,10 +32,10 @@
 			<view class="bB-f5 py-3 px-2 d-flex j-sb a-center">
 				<view class="d-flex a-center">订单类型：<text class="red">{{item.type==2?'包月':'普通'}}</text></view>
 			</view>
-			<view class="d-flex j-end py-3 px-2">
-				<view class="tkBtn b-e1 radius10" v-if="item.transport_status==0" @click="orderUpdate(index,1)">立即配送</view>
-				<view class="tkBtn b-e1 radius10" v-if="item.transport_status==1" @click="orderUpdate(index,2)">配送完成</view>
-				<view class="tkBtn b-e1 radius10" v-if="item.transport_status==2&&item.pay_type==2&&item.pay_status==0">上传支付凭证</view>
+			<view class="d-flex j-end px-2">
+				<view class="tkBtn b-e1 my-3 radius10" v-if="item.transport_status==0" @click="orderUpdate(index,1)">立即配送</view>
+				<view class="tkBtn b-e1 my-3 radius10" v-if="item.transport_status==1" @click="orderUpdate(index,2)">配送完成</view>
+				<view class="tkBtn b-e1 my-3 radius10" v-if="item.transport_status==2&&item.pay_type==2&&item.pay_status==0">上传支付凭证</view>
 			</view>
 		</view>
 		
@@ -68,7 +68,7 @@
 		onLoad(options) {
 			const self = this;
 			self.paginate = self.$Utils.cloneForm(self.$AssetsConfig.paginate);
-			self.searchItem.shop_no = uni.getStorageSync('riderInfo').user_no;
+			// self.searchItem.shop_no = uni.getStorageSync('riderInfo').user_no;
 			//self.$Utils.loadAll(['getMainData'], self);
 		},
 		

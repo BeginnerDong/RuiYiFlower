@@ -63,7 +63,7 @@
 				self.$Utils.loadAll(['getMainData'], self)
 			};
 			self.submitData.headImg  = [{type:'image',url:uni.getStorageSync('user_info').headImgUrl}];
-			self.submitData.title = uni.getStorageSync('user_info').nickname
+			self.submitData.title = uni.getStorageSync('user_info').nickname;
 		},
 		
 		methods: {
@@ -155,6 +155,13 @@
 				console.log('self.submitData', self.submitData)
 				if (pass) {
 					self.messageAdd();
+					uni.showToast({
+						title:'评论成功',
+						duration:2000
+					})
+					setTimeout(function(){
+						self.Router.navigateTo({route:{path:'/pages/user-order/user-order'}});
+					},2000)
 				} else {
 					uni.setStorageSync('canClick', true);
 					self.$Utils.showToast('请补全信息', 'none')
@@ -178,10 +185,10 @@
 				    isremark:1,
 				  }
 				}];
+				console.log('postData.data', postData.data)
 				const callback = (data) => {
 			
 					if (data.solely_code == 100000) {
-			
 						self.$Utils.showToast('评价成功', 'none')
 						setTimeout(function() {
 							self.$Router.redirectTo({route:{path:'/pages/userOrder/userOrder'}})
@@ -194,6 +201,8 @@
 				};
 				self.$apis.messageAdd(postData, callback);
 			},
+			
+			
 			
 		}
 	}

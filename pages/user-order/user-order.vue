@@ -38,7 +38,7 @@
 					<view>供{{item.child.length}}件商品 合计：￥{{item.price}}</view>
 				</view>
 				<view class="bB-f5 py-3 px-2 d-flex j-sb a-center">
-					<view class="d-flex a-center">
+					<view class="d-flex a-center" v-if="item.pay_status==1&&item.transport_status==0&&item.order_step==0">
 						<view>提货码：</view>
 						<image :src="item.qrcode" @click="hxEwmShow(index)" class="hx-icon"></image>
 					</view>
@@ -84,8 +84,10 @@
 					<view class="tkBtn b-e1 radius10" v-if="item.transport_status==0&&item.order_step==0&&item.pay_type==1&&item.pay_status==1"
 					:data-id="item.id" 
 					@click="Router.navigateTo({route:{path:'/pages/user-refund/user-refund?id='+$event.currentTarget.dataset.id}})">申请退款</view>
-					<view class="tkBtn b-e1 radius10" v-if="item.pay_status==0" @click="orderUpdate(index)"
+					<view class="tkBtn b-e1 radius10" v-if="item.pay_status==0" @click="orderUpdate(index,1)"
 					>取消订单</view>
+					<view class="tkBtn b-e1 radius10" v-if="item.pay_status==1&&item.transport_status==1&&item.order_step==0" @click="orderUpdate(index,2)"
+					>确认收货</view>
 				</view>
 			</view>
 
@@ -230,18 +232,24 @@
 					if (res.info.data.length > 0) {
 						self.userData = res.info.data[0]
 					}
+					
 					self.$Utils.finishFunc('getUserData');
 				};
 				self.$apis.userGet(postData, callback);
 			},
 			
-			orderUpdate(index) {
+			orderUpdate(index,type) {
 				const self = this;
 				uni.setStorageSync('canClick', false);
 				const postData = {};
 				postData.tokenFuncName = 'getProjectToken';
 				postData.data = {
-					status:-1
+					
+				};
+				if(type==1){
+					postData.data.status=-1
+				}else{
+					postData.data.transport_status=2
 				};
 				postData.searchItem = {
 					id:self.mainData[index].id,

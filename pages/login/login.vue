@@ -3,7 +3,7 @@
 		<view class="font-50 head">账号登录</view>
 		
 		<view class="login font-26 pb-1">
-			<input type="text" v-model="submitData.login_name" placeholder="请输入手机号" />
+			<input type="text" v-model="submitData.login_name" placeholder="请输入用户名" />
 			<input type="password" v-model="submitData.password" placeholder="请输入密码" />
 		</view>
 		

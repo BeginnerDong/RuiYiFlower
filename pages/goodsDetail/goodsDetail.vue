@@ -60,22 +60,25 @@
 				<view class="mr-5 pb-2 card" @click="changeCard(1)" :class="titCard==1?'on':''">商品评论</view>
 			</view>
 			<view class="font-24 color2">
+				<!-- 描述 -->
 				<view class="content ql-editor line-h-md text-center ms" style="padding:0" v-html="mainData.content" v-show="titCard==0">
 				</view>
 				
+				<!-- 评论 -->
 				<view v-show="titCard==1" v-if="messageData.length>0" v-for="(item,index) in messageData" :key="index">
-					<view class="bB-f5 pb-2">
+					<view class="bB-f5 py-2">
 						<view class="d-flex a-center j-sb">
 							<view class="d-flex a-center">
-								<image :src="item.headImg&&item.headImg[0]&&item.headImg[0].url!=''?item.headImg[0].url:''" class="wh60 mr-3"></image>
-								<view>{{item.title!=''?item.title:'用户'}}</view>
+								<image :src="item.headImg!=''?item.headImg:'../../static/images/head.png'" 
+								class="wh60 mr-3 radius-5"></image>
+								<view>{{item.nickname!=''?item.title:'用户'}}</view>
 							</view>
 							<view class="color6">{{item.create_time?item.create_time:''}}</view>
 						</view>
 						<view>
 							<view class="py-2">{{item.description}}</view>
 							<view class="d-flex" style="flex-wrap: wrap;">
-								<image v-for="(c_item,c_index) in item.mainImg" :src="c_item.url" class="wh120"></image>
+								<image v-for="(c_item,c_index) in item.mainImg" :key="c_index" :src="c_item.url" class="wh120"></image>
 							</view>
 						</view>
 					</view>
@@ -326,6 +329,7 @@
 				self.$apis.messageGet(postData, callback);
 			},
 			
+			
 			chooseSku(parentid,id){
 				const self = this;
 			    self.skuData = {};
@@ -417,7 +421,7 @@
 .banner .swiper-box{width: 750rpx;height: 750rpx;}
 .banner image{width: 750rpx;height: 750rpx;}
 
-.cardBox .on{position: relative;}
+.cardBox .on{position: relative;color: #FF6740;}
 .cardBox .on::before{content: '';width: 100rpx;height: 5rpx;background-color: #FF6740;position: absolute;bottom: 0;left: 50%;margin-left: -50rpx;}
 
 .ms image{width: 100%;height: 400rpx;margin-top: 40rpx;}
@@ -428,7 +432,7 @@
 
 .ggBox{min-height: 900rpx;}
 .gg{width: 182rpx;}
-.gg image{width: 182rpx;height: 182rpx;border-radius: 5rpx;position: absolute;top: -60rpx;}
+.gg image{width: 182rpx;height: 182rpx;border-radius: 20rpx;position: absolute;top: -60rpx;}
 .span{background-color: #f5f5f5;padding: 10rpx 20rpx;margin-right: 30rpx;margin-bottom: 20rpx;display: inline-block;}
 .ggPart .on{background-color: #FDF7F5;color: #FF6740;border: 1px solid #FF6740;}
 .ggBtn{line-height: 80rpx;background-color: #333;width: 345rpx;}

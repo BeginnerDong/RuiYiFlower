@@ -24,7 +24,7 @@
 				<view class="py-3 d-flex a-center j-sb">
 					<image :src="item.orderItem&&item.orderItem[0]&&item.orderItem[0].snap_product&&item.orderItem[0].snap_product.product&&
 									item.orderItem[0].snap_product.product.mainImg&&item.orderItem[0].snap_product.product.mainImg[0]?item.orderItem[0].snap_product.product.mainImg[0].url:''"
-					 class="shopImg"></image>
+					 class="shopImg radius10"></image>
 					<view class="shopCon d-flex flex-column">
 						<view class="tit avoidOverflow pb-2">{{item.orderItem&&item.orderItem[0]&&item.orderItem[0].snap_product?item.orderItem[0].snap_product.title:''}}</view>
 						<!-- <view class="d-flex">
