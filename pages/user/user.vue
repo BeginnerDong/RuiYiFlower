@@ -31,7 +31,7 @@
 			<view class="p-r color2">
 				<view class="px-3 bB-f5 pb-4">
 					<view class="font-30 pb-3 pt-4 font-w">我的订单</view>
-					<view class="d-flex j-sb a-center order">
+					<!-- <view class="d-flex j-sb a-center order">
 						<view class="item font-24 radius10 d-flex j-sb a-center px-3" @click="Router.navigateTo({route:{path:'/pages/user-order/user-order?id=0'}})">
 							<image src="../../static/images/about-icon2.png" mode=""></image>
 							<view>门店订单</view>
@@ -44,6 +44,13 @@
 							<image src="../../static/images/about-icon4.png" mode=""></image>
 							<view>包月订单</view>
 						</view>
+					</view> -->
+					<view class="d-flex j-sb a-end">
+						<view class="font-24 d-flex a-center flex-column" @click="Router.navigateTo({route:{path:'/pages/user-order/user-order?id=0'}})">
+							<image src="../../static/images/about-icon12.png" class="user-icon" style="height:50rpx"></image>
+							<view>我的订单</view>
+						</view>
+						
 					</view>
 				</view>
 				
@@ -110,9 +117,11 @@
 				<image src="../../static/images/nabar3.png" mode=""></image>
 				<view>会员</view>
 			</view>
-			<view class="item" @click="Router.redirectTo({route:{path:'/pages/car/car'}})">
+			<view class="item" @click="Router.redirectTo({route:{path:'/pages/car/car'}})" style="position: relative;">
 				<image src="../../static/images/nabar4.png" mode=""></image>
 				<view>购物车</view>
+				<view style="width: 30rpx;height: 30rpx;line-height: 30rpx;border-radius: 50%;text-align: center;
+				background-color: #FF6740;color: #fff;position: absolute;right: 24rpx;top: 4rpx;">{{cartCount}}</view>
 			</view>
 			<view class="item on">
 				<image src="../../static/images/nabar5-a.png" mode=""></image>
@@ -131,7 +140,8 @@
 				Router:this.$Router,
 				showAll:false,
 				userData:{},
-				Utils:this.$Utils
+				Utils:this.$Utils,
+				cartCount:0
 			}
 		},
 		
@@ -141,6 +151,15 @@
 				self.$Utils.loadAll(['getUserData'], self);
 			}else{
 				self.showAll = true
+			}
+		},
+		
+		onShow() {
+			const self = this;
+			self.cartCount = 0;
+			self.cartData = self.$Utils.getStorageArray('cartData');
+			for (var i = 0; i < self.cartData.length; i++) {
+				 self.cartCount += self.cartData[i].count
 			}
 		},
 		

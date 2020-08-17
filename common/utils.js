@@ -1,5 +1,5 @@
 import assetsConfig from "@/config/assets.config.js";
-
+import token from '@/common/token.js';
 export default {
 	
 	

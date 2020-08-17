@@ -2,9 +2,9 @@
 	<view>
 
 		<view class="font-26 color2 mx-3 my-2 bg-white d-flex overflow-h orderList">
-			<view class="orderLi" :class="orderLiCurr==0?'on':''" @click="changeOrderLi(0)">门店自提</view>
-			<view class="orderLi bL-f5 bR-f5" :class="orderLiCurr==1?'on':''" @click="changeOrderLi(1)">送货上门</view>
-			<view class="orderLi" :class="orderLiCurr==2?'on':''" @click="changeOrderLi(2)">包月订单</view>
+			<view class="orderLi" :class="orderLiCurr==0?'on':''" @click="changeOrderLi(0)">门店自提({{userData.order.zt?userData.order.zt:0}})</view>
+			<view class="orderLi bL-f5 bR-f5" :class="orderLiCurr==1?'on':''" @click="changeOrderLi(1)">送货上门({{userData.order.sh?userData.order.sh:0}})</view>
+			<view class="orderLi" :class="orderLiCurr==2?'on':''" @click="changeOrderLi(2)">包月订单({{userData.order.by?userData.order.by:0}})</view>
 		</view>
 
 		<!-- 自提门店 -->
@@ -81,7 +81,7 @@
 				</view>
 				<view class="bB-f5 py-3 px-2 d-flex j-sb a-center">
 					<view class="d-flex a-center">支付方式：{{item.pay_type==1?'线上支付':'线下支付'}}</view>
-					<view class="tkBtn b-e1 radius10" v-if="item.transport_status==0&&item.order_step==0&&item.pay_type==1"
+					<view class="tkBtn b-e1 radius10" v-if="item.transport_status==0&&item.order_step==0&&item.pay_type==1&&item.pay_status==1"
 					:data-id="item.id" 
 					@click="Router.navigateTo({route:{path:'/pages/user-refund/user-refund?id='+$event.currentTarget.dataset.id}})">申请退款</view>
 					<view class="tkBtn b-e1 radius10" v-if="item.pay_status==0" @click="orderUpdate(index)"
@@ -162,6 +162,7 @@
 				statusThree: 0,
 				chooseIndex: -1,
 				is_hxEwmShow:false,
+				userData:{}
 			}
 		},
 
@@ -170,7 +171,7 @@
 		onLoad(options) {
 			const self = this;
 			self.paginate = self.$Utils.cloneForm(self.$AssetsConfig.paginate);
-			//self.$Utils.loadAll(['getMainData'], self);
+			self.$Utils.loadAll(['getUserData'], self);
 			if(options.id){
 				self.optionsId = options.id
 			}
@@ -184,6 +185,55 @@
 		},
 
 		methods: {
+			
+			getUserData() {
+				const self = this;
+				const postData = {};
+				postData.tokenFuncName = 'getProjectToken';
+				postData.getAfter = {
+					order: {
+						tableName: 'Order',
+						searchItem:{
+							status:1
+						},
+						middleKey: 'user_no',
+						key: 'user_no',
+						condition: 'in',
+						compute:{
+						  zt:[
+						    'count',
+						    'count',
+						    {level: 1,
+							transport_type: 2,
+							pay_status: 1,
+							type: 1}
+						  ],
+						  sh:[
+						    'count',
+						    'count',
+						    {level: 1,
+							transport_type: 1,
+							//pay_status: 1,
+							type: 1}
+						  ],
+						  by:[
+						    'count',
+						    'count',
+						    {level: 1,
+							pay_status: 1,
+							type: 2}
+						  ],
+						},
+					},
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.userData = res.info.data[0]
+					}
+					self.$Utils.finishFunc('getUserData');
+				};
+				self.$apis.userGet(postData, callback);
+			},
 			
 			orderUpdate(index) {
 				const self = this;

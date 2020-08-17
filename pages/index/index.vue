@@ -77,9 +77,11 @@
 				<image src="../../static/images/nabar3.png" mode=""></image>
 				<view>会员</view>
 			</view>
-			<view class="item" @click="Router.redirectTo({route:{path:'/pages/car/car'}})">
+			<view class="item" @click="Router.redirectTo({route:{path:'/pages/car/car'}})" style="position: relative;">
 				<image src="../../static/images/nabar4.png" mode=""></image>
 				<view>购物车</view>
+				<view style="width: 30rpx;height: 30rpx;line-height: 30rpx;border-radius: 50%;text-align: center;
+				background-color: #FF6740;color: #fff;position: absolute;right: 24rpx;top: 4rpx;">{{cartCount}}</view>
 			</view>
 			<view class="item" @click="Router.redirectTo({route:{path:'/pages/user/user'}})">
 				<image src="../../static/images/nabar5.png" mode=""></image>
@@ -100,13 +102,24 @@
 				sliderData:{},
 				hotData:[],
 				newData:[],
-				monthData:[]
+				monthData:[],
+				cartCount:0
 			}
 		},
 		
 		onLoad() {
 			const self = this;
+			
 			self.$Utils.loadAll(['getMenuData','getSliderData','getHotData','getNewData','getMonthData','getUserData'], self);
+		},
+		
+		onShow() {
+			const self = this;
+			self.cartCount = 0;
+			self.cartData = self.$Utils.getStorageArray('cartData');
+			for (var i = 0; i < self.cartData.length; i++) {
+				 self.cartCount += self.cartData[i].count
+			}
 		},
 		
 		methods: {

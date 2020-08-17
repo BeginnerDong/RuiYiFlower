@@ -20,22 +20,27 @@
 		</view>
 
 		<view class="bg-white mx-3 px-2 mt-2">
-			<view class="py-3 d-flex a-center j-sb" v-for="(item,index) in mainData.child" :key="index"
-			@click="Router.navigateTo({route:{path:'/pages/user-orderComment/user-orderComment'}})">
-				<image :src="item.orderItem&&item.orderItem[0]&&item.orderItem[0].snap_product&&item.orderItem[0].snap_product.product&&
-								item.orderItem[0].snap_product.product.mainImg&&item.orderItem[0].snap_product.product.mainImg[0]?item.orderItem[0].snap_product.product.mainImg[0].url:''"
-				 class="shopImg"></image>
-				<view class="shopCon d-flex flex-column">
-					<view class="tit avoidOverflow pb-2">{{item.orderItem&&item.orderItem[0]&&item.orderItem[0].snap_product?item.orderItem[0].snap_product.title:''}}</view>
-					<!-- <view class="d-flex">
-						<view class="font-24 carSpan mb-5 color6 px-1">精品大束</view>
-					</view> -->
-					<view class="flex1">
-						<view class="price">{{item.unit_price}}</view>
-						<view class="font-26 color6">x{{item.count}}</view>
+			<view  v-for="(item,index) in mainData.child" :key="index">
+				<view class="py-3 d-flex a-center j-sb">
+					<image :src="item.orderItem&&item.orderItem[0]&&item.orderItem[0].snap_product&&item.orderItem[0].snap_product.product&&
+									item.orderItem[0].snap_product.product.mainImg&&item.orderItem[0].snap_product.product.mainImg[0]?item.orderItem[0].snap_product.product.mainImg[0].url:''"
+					 class="shopImg"></image>
+					<view class="shopCon d-flex flex-column">
+						<view class="tit avoidOverflow pb-2">{{item.orderItem&&item.orderItem[0]&&item.orderItem[0].snap_product?item.orderItem[0].snap_product.title:''}}</view>
+						<!-- <view class="d-flex">
+							<view class="font-24 carSpan mb-5 color6 px-1">精品大束</view>
+						</view> -->
+						<view class="flex1">
+							<view class="price">{{item.unit_price}}</view>
+							<view class="font-26 color6">x{{item.count}}</view>
+						</view>
 					</view>
 				</view>
+				<view class="d-flex j-end pb-2" v-if="mainData.transport_status==2&&item.isremark==0" :data-id="item.id" @click="Router.navigateTo({route:{path:'/pages/user-orderComment/user-orderComment?id='+$event.currentTarget.dataset.id}})">
+					<view class="tkBtn b-e1 radius10">去评论</view>
+				</view>
 			</view>
+			
 			<!-- 自提订单显示 -->
 			<view class="d-flex a-center j-sb py-3 bT-f5" @click="hxEwmShow()" v-if="mainData.transport_type==2">
 				<view>提货码：</view>
@@ -59,9 +64,7 @@
 				<view>共{{mainData.child?mainData.child.length:''}}件商品</view>
 				<view>合计：<text class="price font-28">{{mainData.price}}</text></view>
 			</view>
-			<view class="d-flex j-end pb-2">
-				<view class="tkBtn b-e1 radius10">申请退款</view>
-			</view>
+			
 			<!-- <view class="pb-3">支付方式：<text class="colorR">线下支付</text></view> --><!-- 包月订单显示 -->
 			<view class="pb-3">订单编号：{{mainData.order_no}}</view>
 			<view>下单时间：{{mainData.create_time}}</view>

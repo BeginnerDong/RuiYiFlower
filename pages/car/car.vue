@@ -14,10 +14,14 @@
 				 <view class="d-flex"><view class="font-24 carSpan mb-5 color6 px-1">{{item.sku&&item.sku[item.skuIndex]?item.sku[item.skuIndex].title:''}}</view></view>
 				<view class="d-flex j-sb">
 					<view class="price">{{item.sku&&item.sku[item.skuIndex]?item.sku[item.skuIndex].price:''}}</view>
-					<view class="b-e1 d-flex a-center count">
-						<image src="../../static/images/shopping-icon2.png" @click="counter(index,'-')" class="count-icon1"></image>
+					<view class="b-e1 d-flex a-center count" style="height: 50rpx;">
+						<view style="width: 45rpx;text-align: center;font-weight: 700;" @click="counter(index,'-')">
+							-
+						</view>
 						<view class="num bL-e1 bR-e1 text-center">{{item.count}}</view>
-						<image src="../../static/images/shopping-icon3.png" @click="counter(index,'+')" class="count-icon2"></image>
+						<view style="width: 45rpx;text-align: center;font-weight: 700;" @click="counter(index,'+')">
+							+
+						</view>
 					</view>
 				</view>
 			</view>

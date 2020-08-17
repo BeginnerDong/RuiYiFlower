@@ -63,23 +63,24 @@
 				<view class="content ql-editor line-h-md text-center ms" style="padding:0" v-html="mainData.content" v-show="titCard==0">
 				</view>
 				
-				<view v-show="titCard==1">
+				<view v-show="titCard==1" v-if="messageData.length>0" v-for="(item,index) in messageData" :key="index">
 					<view class="bB-f5 pb-2">
 						<view class="d-flex a-center j-sb">
 							<view class="d-flex a-center">
-								<image src="../../static/images/head.png" class="wh60 mr-3"></image>
-								<view>昵称</view>
+								<image :src="item.headImg&&item.headImg[0]&&item.headImg[0].url!=''?item.headImg[0].url:''" class="wh60 mr-3"></image>
+								<view>{{item.title!=''?item.title:'用户'}}</view>
 							</view>
-							<view class="color6">2020-12-25 12:25:56</view>
+							<view class="color6">{{item.create_time?item.create_time:''}}</view>
 						</view>
 						<view>
-							<view class="py-2">评论内容</view>
-							<view class="flex">
-								<image src="../../static/images/icon5.png" class="wh120"></image>
+							<view class="py-2">{{item.description}}</view>
+							<view class="d-flex" style="flex-wrap: wrap;">
+								<image v-for="(c_item,c_index) in item.mainImg" :src="c_item.url" class="wh120"></image>
 							</view>
 						</view>
 					</view>
 				</view>
+				<view v-if="messageData.length==0" style="width: 100%;text-align: center;">暂无评论~</view>
 			</view>
 		</view>
 		
@@ -160,7 +161,8 @@
 				{value:6,key:'周六收花'},],
 				chooseWeek:-1,
 				deliver:0,
-				titCard:0
+				titCard:0,
+				messageData:[]
 			}
 		},
 		
@@ -168,8 +170,6 @@
 			const self = this;
 			self.paginate = self.$Utils.cloneForm(self.$AssetsConfig.paginate);
 			self.id = options.id;
-			
-			
 			if (options.user_no) {
 				const callback = (res) => {
 					self.$Utils.loadAll(['getMainData'], self);
@@ -211,13 +211,13 @@
 			if (ops.from === 'button') {
 				return {
 					title:self.mainData.title,
-					path: '/pages/goodsDetail/goodsDetail?user_no='+uni.getStorageSync('user_info').user_no, //点击分享的图片进到哪一个页面
+					path: '/pages/goodsDetail/goodsDetail?user_no='+uni.getStorageSync('user_info').user_no+'&id='+self.id, //点击分享的图片进到哪一个页面
 					imageUrl:self.mainData&&self.mainData.mainImg&&self.mainData.mainImg[0]&&self.mainData.mainImg[0].url?self.mainData.mainImg[0].url:'',
 				}
 			}else{
 				return {
 					title:self.mainData.title,
-					path: '/pages/goodsDetail/goodsDetail?user_no='+uni.getStorageSync('user_info').user_no, //点击分享的图片进到哪一个页面
+					path: '/pages/goodsDetail/goodsDetail?user_no='+uni.getStorageSync('user_info').user_no+'&id='+self.id, //点击分享的图片进到哪一个页面
 					imageUrl:self.mainData&&self.mainData.mainImg&&self.mainData.mainImg[0]&&self.mainData.mainImg[0].url?self.mainData.mainImg[0].url:'',
 				}
 			}
@@ -242,6 +242,8 @@
 			
 			getMainData() {
 				const self = this;
+				var path = '/pages/goodsDetail/goodsDetail?user_no='+uni.getStorageSync('user_info').user_no+'&id='+self.id;
+				console.log('path',path)
 				const postData = {};
 				postData.searchItem = {
 					thirdapp_id:2,
@@ -297,9 +299,31 @@
 						}
 						self.$Utils.setStorageArray('footData', target, 'id', 999);
 					}
+					self.getMessageData();
 					self.$Utils.finishFunc('getMainData');
 				};
 				self.$apis.productGet(postData, callback);
+			},
+			
+			getMessageData() {
+				const self = this;
+				const postData = {};
+				postData.tokenFuncName = 'getProjectToken';
+				postData.paginate = self.$Utils.cloneForm(self.paginate);
+				postData.searchItem = {
+					thirdapp_id: 2,
+					product_no: self.mainData.product_no,
+					type: 1,
+					user_type: 0
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.messageData.push.apply(self.messageData, res.info.data);
+					}
+					console.log('self.messageData', self.messageData)
+					self.$Utils.finishFunc('getMessageData');
+				};
+				self.$apis.messageGet(postData, callback);
 			},
 			
 			chooseSku(parentid,id){

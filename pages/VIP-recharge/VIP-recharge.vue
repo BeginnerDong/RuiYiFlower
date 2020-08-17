@@ -11,7 +11,7 @@
 						<image src="../../static/images/vip-icon6.png" class="rechImg"></image>
 						<view class="p-aXY colorf line-h">
 							<view class="rechPrice py-2">{{item.coupon&&item.coupon[0]?item.coupon[0].value:''}}</view>
-							<view>满{{item.coupon&&item.coupon[0]?item.coupon[0].discount:''}}可用</view>
+							<view>满{{item.coupon&&item.coupon[0]?item.coupon[0].condition:''}}可用</view>
 						</view>
 					</view>
 					<view class="py-2">优惠券</view>
