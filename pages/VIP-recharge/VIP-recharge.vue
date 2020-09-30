@@ -14,7 +14,7 @@
 							<view>满{{item.coupon&&item.coupon[0]?item.coupon[0].condition:''}}可用</view>
 						</view>
 					</view>
-					<view class="py-2">优惠券</view>
+					<view class="py-2">优惠券x{{item.behavior}}</view>
 				</view>
 				<view class="rech borderM radius10" v-if="item.sku1.length>0">
 					<view class="rechTop p-r p-1">

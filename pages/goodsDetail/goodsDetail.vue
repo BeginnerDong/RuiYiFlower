@@ -21,7 +21,7 @@
 			</view>
 			<view class="text-center">
 				<button open-type="share" style="background:#fff;line-height:1.5" class="font-24 color6 d-flex pl-3 bL-f5"><image src="../../static/images/detailsl-icon.png" class="fx-icon"></image>分享</button style="background:#fff;line-height:1.5">
-				<view class="font-22 color9 pt-5 pl-3">销量:{{mainData.sale_count}}</view>
+				<view class="font-22 color9 pt-5 pl-3">销量:{{mainData.sale_count?mainData.sale_count:0}}</view>
 			</view>
 		</view>
 		
@@ -35,7 +35,10 @@
 			</view>
 			<view class="py-3 d-flex a-center">
 				<view class="font-28 color6">运费</view>
-				<view class="font-24 color2 pl-3">送货上门，需运费￥{{deliver}} 到店自提，免费</view>
+				<view style="line-height: 40rpx;">
+					<view class="font-24 color2 pl-3">送货上门需运费￥{{deliver}}(满￥{{delivery_standard}}免配送费) </view>
+					<view class="font-24 color2 pl-3">到店自提免费</view>
+				</view>
 			</view>
 		</view>
 		
@@ -82,8 +85,9 @@
 							</view>
 						</view>
 					</view>
+					<view v-if="messageData.length==0" style="width: 100%;text-align: center;">暂无评论~</view>
 				</view>
-				<view v-if="messageData.length==0" style="width: 100%;text-align: center;">暂无评论~</view>
+				
 			</view>
 		</view>
 		
@@ -165,7 +169,8 @@
 				chooseWeek:-1,
 				deliver:0,
 				titCard:0,
-				messageData:[]
+				messageData:[],
+				delivery_standard:0
 			}
 		},
 		
@@ -177,6 +182,7 @@
 				const callback = (res) => {
 					self.$Utils.loadAll(['getMainData'], self);
 					self.deliver = uni.getStorageSync('user_info').thirdApp.delivery_fee;
+					self.delivery_standard = uni.getStorageSync('user_info').thirdApp.delivery_standard;
 				};
 				self.$Token.getProjectToken(callback, {
 					refreshToken: true,
@@ -186,6 +192,7 @@
 				const callback = (res) => {
 					self.$Utils.loadAll(['getMainData'], self);
 					self.deliver = uni.getStorageSync('user_info').thirdApp.delivery_fee;
+					self.delivery_standard = uni.getStorageSync('user_info').thirdApp.delivery_standard;
 				};
 				self.$Token.getProjectToken(callback, {
 					refreshToken: true,

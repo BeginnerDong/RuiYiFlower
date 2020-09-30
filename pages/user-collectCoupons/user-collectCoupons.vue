@@ -82,6 +82,7 @@
 				const postData = {};
 				postData.searchItem = {
 					thirdapp_id: 2,
+					on_shelf:1
 				};
 				postData.getAfter = {
 					hasPick:{

@@ -16,6 +16,13 @@
 						}
         }
         ,{
+            "path" : "pages/article/article",
+            "style" : {
+							"navigationBarTitleText": "详情"
+						}
+        }
+        ,
+		{
             "path" : "pages/goodsDetail/goodsDetail",
             "style" : {
 							"navigationStyle":"custom"

@@ -26,9 +26,11 @@
 				<view class="font-24 color2 line-h pt-3">领券中心</view>
 			</view>
 		</view>
-		
+		<view class="mt-3 mx-3" @click="Router.navigateTo({route:{path:'/pages/article/article'}})">
+			<image style="height: 160rpx;" src="../../static/images/help.png"></image>
+		</view>
 		<!-- 热门专区 -->
-		<view class="line-h font-32 color2 mt-5 mb-3 mx-3 Tit">热卖专区</view>
+		<view class="line-h font-32 color2 mt-3 mb-3 mx-3 Tit">热卖专区</view>
 		<view class="line-h flexX">
 			<view class="p-r ml-3 flex-shrink" v-for="(item,index) in hotData" :key="item.id" :data-id="item.id"
 			 @click="Router.navigateTo({route:{path:'/pages/goodsDetail/goodsDetail?id='+$event.currentTarget.dataset.id}})">
@@ -119,6 +121,23 @@
 			self.cartData = self.$Utils.getStorageArray('cartData');
 			for (var i = 0; i < self.cartData.length; i++) {
 				 self.cartCount += self.cartData[i].count
+			}
+		},
+		
+		onShareAppMessage(ops) {
+			console.log(ops)
+			const self = this;
+			if (ops.from === 'button') {
+				return {
+					title:"瑞意花木",
+					path: '/pages/index/index', //点击分享的图片进到哪一个页面
+					//imageUrl:self.mainData&&self.mainData.mainImg&&self.mainData.mainImg[0]&&self.mainData.mainImg[0].url?self.mainData.mainImg[0].url:'',
+				}
+			}else{
+				return {
+					title:"瑞意花木",
+					path: '/pages/index/index', //点击分享的图片进到哪一个页面
+				}
 			}
 		},
 		

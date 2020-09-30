@@ -86,12 +86,12 @@
 			
 			<view class="py-3 bB-f5 flex1">
 				<view>优惠券</view>
-				<view class="d-flex j-end a-center color6 font-26" v-if="couponData.length==0" @click="couponShow">
+				<view class="d-flex j-end a-center color6 font-26" v-if="couponData.length==0">
 					暂无优惠券使用
 					
 				</view>
 				<view class="d-flex j-end a-center color6 font-26" v-if="couponData.length>0&&chooseCoupon.length==0" @click="couponShow">
-					{{couponData.length}}张优惠券可用
+					{{couponData.length}}张优惠券
 					
 				</view>
 				<view class="d-flex j-end a-center color6 font-26" v-if="couponData.length>0&&chooseCoupon.length>0" @click="couponShow">
@@ -240,10 +240,10 @@
 			/* 	console.log(index)
 				console.log(self.couponData);
 				console.log(self.couponData[0]); */
-				for (var i = 0; i < self.mainData.length; i++) {
-					self.totalPrice += self.mainData[i].product.sku[self.mainData[i].skuIndex].price*self.mainData[i].count
-				};
-				
+				/* for (var i = 0; i < self.mainData.length; i++) {
+					self.totalPrice += parseFloat(parseFloat(self.mainData[i].product.sku[self.mainData[i].skuIndex].price)*parseFloat(self.mainData[i].count)).toFixed(2)
+				}; */
+				console.log('self.totalPrice', self.totalPrice)
 				if(self.couponData[self.couponCurr]&&self.couponData[self.couponCurr].id){
 					var id = self.couponData[self.couponCurr].id;
 				}else{
@@ -275,6 +275,9 @@
 					console.log('self.pay',self.pay)
 					return
 				} else {
+					console.log('self.totalPrice', self.totalPrice)
+					console.log('self.totalPrice', self.couponTotalPrice)
+					console.log('self.totalPrice', findCoupon.condition)
 					if ((self.totalPrice - self.couponTotalPrice) < findCoupon.condition) {
 						self.$Utils.showToast('未达满减标准', 'none');				
 						return;

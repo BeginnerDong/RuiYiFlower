@@ -90,7 +90,17 @@
 			<view class="mask bg-white radius20 p-aXY mx-a overflow-h flex5">
 				<view class="py-3 text-center font-32 font-w bB-f5 w-100">{{zx_show==1?'专享服务':'专享福利'}}</view>
 				<view class="flex-1 p-3 w-100">
-					{{zx_show==1?'服务内容':'专享福利内容'}}
+					<view v-if="zx_show==1">
+						<view>1、一对一养护指导</view>
+						<view>2、提供正规发票</view>
+						<view>3、同城专车24小时内送货到家</view>
+						<view>4、赠送肥料喷壶，养护更方便</view>
+						<view>5、自签收起15天内在正常养护情况下出现枯萎死亡，包赔包送货</view>
+					</view>
+					<view v-else>
+						<view>1、会员专享优惠券</view>
+						<view>2、不定期店内赠送礼品</view>
+					</view>
 				</view>
 				<view class="colorf font-30 Mgb py-3 text-center w-100" @click="zxShow(0)">确定</view>
 			</view>
@@ -266,6 +276,7 @@
 				const postData = {};
 				postData.searchItem = {
 					thirdapp_id: 2,
+					on_shelf:1
 				};
 				postData.getAfter = {
 					hasPick:{
