@@ -33,13 +33,13 @@
 					<view class="pl-3 d-flex"><image src="../../static/images/detailsl-icon1.png" class="ps-icon"></image>到店自提</view>
 				</view>
 			</view>
-			<view class="py-3 d-flex a-center">
+			<!-- <view class="py-3 d-flex a-center">
 				<view class="font-28 color6">运费</view>
 				<view style="line-height: 40rpx;">
 					<view class="font-24 color2 pl-3">送货上门需运费￥{{deliver}}(满￥{{delivery_standard}}免配送费) </view>
 					<view class="font-24 color2 pl-3">到店自提免费</view>
 				</view>
-			</view>
+			</view> -->
 		</view>
 		
 		<view class="p-3 d-flex a-center bg-white mb-2">
@@ -340,6 +340,7 @@
 			chooseSku(parentid,id){
 				const self = this;
 			    self.skuData = {};
+				self.specsCurr = -1;
 			    if(self.choose_sku_item.indexOf(id)==-1){
 			      return;
 			    };
@@ -378,7 +379,7 @@
 				const self = this;
 				if(!self.mainData.sku[self.specsCurr]){
 					uni.setStorageSync('canClick',true);
-					self.$Utils.showToast('商品暂无可选规格！', 'none');
+					self.$Utils.showToast('请选择规格或收货方式', 'none');
 					return
 				};
 				if(self.mainData.type==2&&self.chooseWeek<0){
@@ -392,13 +393,34 @@
 					type:self.mainData.type,product:self.mainData,skuIndex:self.specsCurr},
 				);
 				uni.setStorageSync('payPro', self.orderList);
-				self.Router.navigateTo({route:{path:'/pages/car-order/car-order?week='+self.chooseWeek}})
+				if(self.$Utils.inArray(100,self.mainData.sku[self.specsCurr].sku_item)!=-1){
+					console.log('y')
+					self.Router.navigateTo({route:{path:'/pages/car-order/car-order?week='+self.chooseWeek+'&type=0'}})
+				}else if(self.$Utils.inArray(101,self.mainData.sku[self.specsCurr].sku_item)!=-1){
+					self.Router.navigateTo({route:{path:'/pages/car-order/car-order?week='+self.chooseWeek+'&type=1'}})
+				}else{
+					console.log('n')
+					self.Router.navigateTo({route:{path:'/pages/car-order/car-order?week='+self.chooseWeek+'&type=0'}})
+				};
+				
 				uni.setStorageSync('canClick',true);
 			},
 			
 			addCar() {
 				const self = this;
+				if(!self.mainData.sku[self.specsCurr]){
+					uni.setStorageSync('canClick',true);
+					self.$Utils.showToast('请选择规格或收货方式', 'none');
+					return
+				};
 				var obj = self.mainData;
+				if(self.$Utils.inArray(100,self.mainData.sku[self.specsCurr].sku_item)!=-1){
+					self.mainData.transport_type = 0
+				}else if(self.$Utils.inArray(101,self.mainData.sku[self.specsCurr].sku_item)!=-1){
+					self.mainData.transport_type = 1
+				}else{
+					self.mainData.transport_type = 0
+				};
 				self.mainData.skuIndex = self.specsCurr;
 				self.mainData.skuId = self.mainData.sku[self.specsCurr].id;
 				var array = self.$Utils.getStorageArray('cartData');

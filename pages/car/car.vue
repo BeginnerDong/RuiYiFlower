@@ -8,7 +8,13 @@
 		
 		<view class="p-3 bg-white d-flex a-center j-sb mb-2"  v-for="(item,index) in mainData" :key="index">
 			<image  :src="item.isSelect?'../../static/images/shopping-icon.png':'../../static/images/shopping-icon1.png'" @click="choose(index)" class="shop-icon"></image>
-			<image :src="item.mainImg&&item.mainImg[0]?item.mainImg[0].url:''" class="shopImg"></image>
+			<view style="position: relative;">
+				<image :src="item.mainImg&&item.mainImg[0]?item.mainImg[0].url:''" class="shopImg"></image>
+				<view style="position: absolute;bottom: 0;width: 100%;text-align: center;background-color: #000000;opacity: 0.5;color: #fff;">
+					{{item.transport_type&&item.transport_type==1?'送货上门':'自提'}}
+				</view>
+			</view>
+			
 			<view class="shopCon d-flex flex-column">
 				<view class="tit avoidOverflow pb-2">{{item.title}}</view>
 				 <view class="d-flex"><view class="font-24 carSpan mb-5 color6 px-1">{{item.sku&&item.sku[item.skuIndex]?item.sku[item.skuIndex].title:''}}</view></view>
@@ -121,7 +127,7 @@
 					if (self.mainData[i].isSelect) {
 						orderList.push(
 							{sku_id:self.mainData[i].sku[self.mainData[i].skuIndex].id,count:self.mainData[i].count,
-							product:self.mainData[i],skuIndex:self.mainData[i].skuIndex},
+							product:self.mainData[i],skuIndex:self.mainData[i].skuIndex,transport_type:self.mainData[i].transport_type?self.mainData[i].transport_type:0},
 						);
 					};
 				};
@@ -129,10 +135,18 @@
 					self.$Utils.showToast('未选择商品', 'none', 1000);
 					return;
 				};
+				for (var i = 0; i < orderList.length; i++) {
+					if(i<orderList.length-1){
+						if(orderList[i].transport_type!=orderList[i+1].transport_type){
+							self.$Utils.showToast('所选商品收货方式不同，不能同时下单', 'none', 1000);
+							return;
+						}
+					}				
+				};
 				uni.setStorageSync('payPro', orderList);
 				self.$Router.navigateTo({
 					route: {
-						path: '/pages/car-order/car-order'
+						path: '/pages/car-order/car-order?type='+orderList[0].transport_type
 					}
 				})
 			},

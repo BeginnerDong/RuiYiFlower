@@ -1,11 +1,11 @@
 <template>
 	<view class="color2 font-28">
-		<view class="bg-white bB-f5">
+		<!-- <view class="bg-white bB-f5">
 			<view class="px-3 py-2 d-flex orderList">
 				<view class="orderLi borderM radiusL" :class="orderLiCurr==0?'on':''" @click="changeOrderLi(0)">到店自提</view>
 				<view class="orderLi borderM radiusR" :class="orderLiCurr==1?'on':''" @click="changeOrderLi(1)">送货上门</view>
 			</view>
-		</view>
+		</view> -->
 		<view class="bg-white line-h p-r pb-1 mb-2"  v-show="orderLiCurr==0">
 			<view class="p-3 line-h d-flex a-center j-sb p-r" @click="Router.navigateTo({route:{path:'/pages/user-store/user-store'}})">
 				<view v-if="shopData.address">
@@ -64,10 +64,10 @@
 		</view>
 		
 		<view class="bg-white px-3">
-			<view class="py-3 bB-f5 flex1" v-show="orderLiCurr==1">
+			<!-- <view class="py-3 bB-f5 flex1" v-show="orderLiCurr==1">
 				<view>运费</view>
 				<view class="font-24 color6">￥{{delivery}}</view>
-			</view>
+			</view> -->
 			<view class="py-3 flex1">
 				<view>支付方式</view>
 				<view class="font-24 flex0" @click="changePayType(2)" v-show="orderLiCurr==1&&firstTime==0">
@@ -175,7 +175,9 @@
 			const self = this;
 			uni.showLoading();
 			//self.$Utils.loadAll(['getUserData'], self);
-			
+			if(options.type){
+				self.orderLiCurr = options.type
+			};
 			const callback = (res) => {
 				self.$Utils.loadAll(['getUserData','getUserCouponData'], self);
 				self.mainData = uni.getStorageSync('payPro');
@@ -559,8 +561,8 @@
 				const callback = (res) => {
 					if (res.solely_code == 100000 && res.info.data[0]) {
 						self.userData = res.info.data[0];
-						self.delivery_fee = uni.getStorageSync('user_info').thirdApp.delivery_fee;
-						self.delivery_standard = uni.getStorageSync('user_info').thirdApp.delivery_standard;
+						/* self.delivery_fee = uni.getStorageSync('user_info').thirdApp.delivery_fee;
+						self.delivery_standard = uni.getStorageSync('user_info').thirdApp.delivery_standard; */
 						self.countTotalPrice()
 					} else {
 						self.$Utils.showToast(res.msg, 'none')
@@ -602,14 +604,14 @@
 				console.log('self.delivery_standard',self.delivery_standard)
 				console.log('self.totalPrice',self.totalPrice)
 				
-				if(parseFloat(self.delivery_standard)>self.totalPrice&&self.orderLiCurr==1){
+				/* if(parseFloat(self.delivery_standard)>self.totalPrice&&self.orderLiCurr==1){
 					console.log('self.delivery_fee',self.delivery_fee)
 					self.delivery = self.delivery_fee;
 					self.totalPrice = (parseFloat(self.totalPrice)+parseFloat(self.delivery_fee)).toFixed(2)
 				}else{
 					self.delivery = 0;
 					self.totalPrice = parseFloat(self.totalPrice).toFixed(2)
-				};
+				}; */
 				//console.log('wxPay',wxPay)
 				if (self.totalPrice > 0) {
 					self.pay.wxPay = {

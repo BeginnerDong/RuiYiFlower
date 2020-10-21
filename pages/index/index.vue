@@ -3,10 +3,14 @@
 		<!-- banner -->
 		<view class="banner radius20 overflow-h mx-3 mt-2">
 			<view class="headBg p-a top-0 left-0 right-0"><image src="../../static/images/about-icon13.png" mode=""></image></view>
-			<swiper class="swiper-box" indicator-dots="indicatorDots" autoplay="autoplay" interval="3000" indicator-active-color="#FF6F48">
+			<swiper class="swiper-box" indicator-dots="indicatorDots" :autoplay="autoplay" interval="3000" indicator-active-color="#FF6F48">
 				<block>
-					<swiper-item class="swiper-item" v-for="(item,index) in sliderData.mainImg" :key="index">
-						<image :src="item.url" class="slide-image" />
+					<swiper-item class="swiper-item"  v-for="(item,index) in sliderData.mainImg" :key="index">
+						
+						<image v-if="item.type=='image'" :src="item.url"
+						 mode="widthFix" />
+						<video style="height: 300rpx;width: 690rpx;" id="myVideo" loop  show-play-btn controls @click="ZhanTing"  objectFit="cover" v-if="item.type=='vedio'"
+						 :src="item.url"></video>
 					</swiper-item>
 				</block>
 			</swiper>
@@ -105,7 +109,8 @@
 				hotData:[],
 				newData:[],
 				monthData:[],
-				cartCount:0
+				cartCount:0,
+				autoplay:true
 			}
 		},
 		
@@ -142,6 +147,11 @@
 		},
 		
 		methods: {
+			
+			ZhanTing() {
+				const self = this;
+				self.autoplay = !self.autoplay
+			},
 			
 			getUserData() {
 				const self = this;
