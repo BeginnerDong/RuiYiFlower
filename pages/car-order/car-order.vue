@@ -186,15 +186,17 @@
 					self.week = options.week
 					self.creatLog()
 				};
+				self.getUserInfoData()
 			};
 			self.$Token.getProjectToken(callback, {
 				refreshToken: true
 			})
+			
 		},
 		
 		onShow() {
 			const self = this;
-			if(uni.getStorageSync('choosedAddressData')){
+			 if(uni.getStorageSync('choosedAddressData')){
 				self.addressData = uni.getStorageSync('choosedAddressData')
 			}else{
 				self.getAddressData()
@@ -205,6 +207,24 @@
 		},
 		
 		methods: {
+			
+			
+			
+			getUserInfoData() {
+				const self = this;
+				const postData = {};
+				postData.tokenFuncName = 'getProjectToken';
+				postData.searchItem = {
+					user_no:uni.getStorageSync('user_info').user_no
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.orderInfo.name = res.info.data[0].name
+						self.orderInfo.phone = res.info.data[0].phone
+					}
+				};
+				self.$apis.userInfoGet(postData, callback);
+			},
 			
 			counter(index, type) {
 				const self = this;
@@ -404,7 +424,7 @@
 					snap_address: self.addressData})
 				}
 				const callback = (user, res) => {
-					self.free_show = !self.free_show;
+					/* self.free_show = !self.free_show; */
 					self.addOrder(orderList)
 				};
 				self.$Utils.getAuthSetting(callback);
@@ -500,6 +520,19 @@
 						});
 					}
 				};
+				if(self.orderLiCurr==0){
+					postData.payAfter.push({
+						tableName: 'UserInfo',
+						FuncName: 'update',
+						data: {
+							name:self.orderInfo.name,
+							phone:self.orderInfo.phone
+						},
+						searchItem:{
+							user_no:uni.getStorageSync('user_info').user_no
+						}
+					})
+				};
 				const callback = (res) => {
 					if (res.solely_code == 100000) {
 						uni.setStorageSync('canClick', true);
@@ -516,7 +549,7 @@
 										}
 									});
 									setTimeout(function() {
-										self.$Router.redirectTo({route:{path:'/pages/user-order/user-order?id=1'}})
+										self.$Router.redirectTo({route:{path:'/pages/user-order/user-order?id=0'}})
 									}, 1000);
 								} else {
 									uni.setStorageSync('canClick', true);
@@ -537,7 +570,7 @@
 								}
 							});
 							setTimeout(function() {
-								self.$Router.redirectTo({route:{path:'/pages/user-order/user-order?id=1'}})
+								self.$Router.redirectTo({route:{path:'/pages/user-order/user-order?id=0'}})
 							}, 1000);
 						};
 					} else {

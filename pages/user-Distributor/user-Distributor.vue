@@ -14,7 +14,7 @@
 				<view class="Mcolor" v-if="item.transport_status==1">配送中</view>
 				<view class="Mcolor" v-if="item.transport_status==2">已完成</view>
 			</view>
-			<view class="d-flex j-sb a-center p-2 bB-f5">
+			<view class="d-flex j-sb a-center p-2 bB-f5" :data-id="item.id" @click="Router.navigateTo({route:{path:'/pages/user-orderDetail/user-orderDetail?id='+$event.currentTarget.dataset.id+'&type=rider'}})">
 				<view class="d-flex a-center">
 					<image v-for="(c_item,c_index) in item.child" :key="c_index" :src="c_item.orderItem&&c_item.orderItem[0]&&c_item.orderItem[0].snap_product&&c_item.orderItem[0].snap_product.product&&
 								c_item.orderItem[0].snap_product.product.mainImg&&c_item.orderItem[0].snap_product.product.mainImg[0]?c_item.orderItem[0].snap_product.product.mainImg[0].url:''" class="orderImg"></image>

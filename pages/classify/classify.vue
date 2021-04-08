@@ -5,7 +5,7 @@
 			<view class="left line-h h-100 font-26 color6 p-f top-0 bottom bg-f5">
 				<view class="py-3 classLi" v-for="(item,index) in menuData" :key="item.id"
 				 @click="changeLeft(index)" :class="leftCurr==index?'on':''" v-show="item.id == 56">{{item.title}}</view>
-				<view class="py-3 classLi" @click="changeLeft(-1)" :class="leftCurr==-1?'on':''">包月鲜花</view>
+				<!-- <view class="py-3 classLi" @click="changeLeft(-1)" :class="leftCurr==-1?'on':''">包月鲜花</view> -->
 				<view class="py-3 classLi" v-for="(item,index) in menuData" :key="item.id"
 				 @click="changeLeft(index)" :class="leftCurr==index?'on':''" v-show="item.id != 56">{{item.title}}</view>
 			</view>
@@ -65,7 +65,7 @@
 		data() {
 			return {
 				Router:this.$Router,
-				leftCurr:-1,
+				leftCurr:0,
 				menuData:[],
 				searchItem:{
 					thirdapp_id:2,
@@ -80,7 +80,7 @@
 		onLoad(options) {
 			const self = this;
 			self.paginate = self.$Utils.cloneForm(self.$AssetsConfig.paginate);
-			if(options.index){
+			if(options.index||options.index==0){
 				self.index = options.index
 			};
 			self.$Utils.loadAll(['getMenuData'], self);
@@ -107,7 +107,7 @@
 			
 			changeLeft(index){
 				const self = this;
-				if(self.leftCurr!=index){
+				if(self.leftCurr!=index||index==0){
 					self.leftCurr = index;
 					if(self.leftCurr==-2){
 						self.searchItem.type = 1;
@@ -180,9 +180,12 @@
 				const callback = (res) => {
 					if (res.info.data.length > 0) {
 						self.menuData = res.info.data;
-						if(self.index){
+						console.log('self.index',self.index)
+						if(self.index||self.index==0){
+							console.log('44343',self.index)
 							self.changeLeft(self.index)
 						}else{
+							self.searchItem.category_id = self.menuData[0].id
 							self.getMainData()
 						}
 					}
