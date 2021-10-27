@@ -3,8 +3,8 @@
 
 		<view class="font-26 color2 mx-3 my-2 bg-white d-flex overflow-h orderList">
 			<view class="orderLi" :class="orderLiCurr==0?'on':''" @click="changeOrderLi(0)">门店自提({{userData.order.zt?userData.order.zt:0}})</view>
-			<view class="orderLi bL-f5 bR-f5" :class="orderLiCurr==1?'on':''" @click="changeOrderLi(1)">送货上门({{userData.order.sh?userData.order.sh:0}})</view>
-			<view class="orderLi" :class="orderLiCurr==2?'on':''" @click="changeOrderLi(2)">包月订单({{userData.order.by?userData.order.by:0}})</view>
+			<view class="orderLi" :class="orderLiCurr==1?'on':''" @click="changeOrderLi(1)">送货上门({{userData.order.sh?userData.order.sh:0}})</view>
+			<!-- <view class="orderLi" :class="orderLiCurr==2?'on':''" @click="changeOrderLi(2)">包月订单({{userData.order.by?userData.order.by:0}})</view> -->
 		</view>
 
 		<!-- 自提门店 -->
@@ -215,7 +215,7 @@
 						    'count',
 						    {level: 1,
 							transport_type: 1,
-							//pay_status: 1,
+							pay_status: 1,
 							type: 1}
 						  ],
 						  by:[
@@ -429,7 +429,7 @@
 	}
 
 	.orderLi {
-		width: 33.33%;
+		width: 50%;
 		text-align: center;
 	}
 

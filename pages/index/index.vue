@@ -26,12 +26,12 @@
 			
 			<view class="d-flex flex-column a-center tt" 
 			@click="Router.navigateTo({route:{path:'/pages/user-collectCoupons/user-collectCoupons'}})">
-				<image src="../../static/images/home-icon4.png" class="icon"></image>
+				<image :src="img2Data.mainImg&&img2Data.mainImg[0]?img2Data.mainImg[0].url:''" class="icon"></image>
 				<view class="font-24 color2 line-h pt-3">领券中心</view>
 			</view>
 		</view>
 		<view class="mt-3 mx-3" @click="Router.navigateTo({route:{path:'/pages/article/article'}})">
-			<image style="height: 160rpx;" src="../../static/images/help.png"></image>
+			<image style="height: 160rpx;" :src="imgData.mainImg&&imgData.mainImg[0]?imgData.mainImg[0].url:''"></image>
 		</view>
 		<!-- 热门专区 -->
 		<view class="line-h font-32 color2 mt-3 mb-3 mx-3 Tit">热卖专区</view>
@@ -58,16 +58,18 @@
 		</view>
 		
 		<!-- 包月鲜花 -->
-		<view class="line-h font-32 color2 mt-5 mb-3 mx-3 Tit">包月鲜花</view>
+		<view class="line-h font-32 color2 mt-5 mb-3 mx-3 Tit">限时抢购</view>
 		<view class="line-h">
 			<view class="p-r ml-3 pb-5" v-for="(item,index) in monthData" :key="item.id" :data-id="item.id"
 			 @click="Router.navigateTo({route:{path:'/pages/goodsDetail/goodsDetail?id='+$event.currentTarget.dataset.id}})">
 				<image :src="item.mainImg&&item.mainImg[0]?item.mainImg[0].url:''" class="yueImg"></image>
-				<view class="font-30 color2 font-w pt-3 pb-2 avoidOverflow yueTit">{{item.title}}</view>
+				<view class="font-30 color2 font-w pt-3 pb-2 avoidOverflow yueTit">{{item.title}}<span class="font-24 pl-2" style="color:#FF6F48">截止至：{{Utils.timeto(item.end_time,'ymd-hms')}}</span></view>
 				<view class="font-28 price">{{item.price}}</view>
 			</view>
 		</view>
-		
+		<button class="p-f" open-type="contact" style="right: 2%;bottom: 20%;border-radius: 50%;overflow: hidden;">
+			<image src="../../static/images/kefu-index.png" style="width: 80rpx;height: 80rpx;"></image>
+		</button>
 		<view style="height: 130rpx;"></view>
 		<!-- footer -->
 		<view class="footer">
@@ -103,6 +105,7 @@
 		data() {
 			return {
 				Router:this.$Router,
+				Utils:this.$Utils,
 				is_show: false,
 				menuData:[],
 				sliderData:{},
@@ -110,14 +113,16 @@
 				newData:[],
 				monthData:[],
 				cartCount:0,
-				autoplay:true
+				autoplay:true,
+				imgData:{},
+				img2Data:{}
 			}
 		},
 		
 		onLoad() {
 			const self = this;
 			
-			self.$Utils.loadAll(['getMenuData','getSliderData','getHotData','getNewData','getMonthData','getUserData'], self);
+			self.$Utils.loadAll(['getMenuData','getSliderData','getHotData','getNewData','getMonthData','getUserData','getImgData','getImg2Data'], self);
 		},
 		
 		onShow() {
@@ -146,7 +151,57 @@
 			}
 		},
 		
+		onShareTimeline(){
+			const self = this;
+			return{
+				title: '瑞意花木',
+			}
+		},
+		
 		methods: {
+			
+			getImg2Data() {
+				const self = this;
+				const postData = {};
+				postData.searchItem = {
+					thirdapp_id: 2,
+					title:'领劵中心'
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.img2Data = res.info.data[0];
+					};
+					self.$Utils.finishFunc('getImg2Data');
+				};
+				self.$apis.labelGet(postData, callback);
+			},
+			
+			getImgData() {
+				const self = this;
+				const postData = {};
+				postData.searchItem = {
+					thirdapp_id: 2
+				};
+				postData.getBefore = {
+					article: {
+						tableName: 'Label',
+						middleKey: 'menu_id',
+						key: 'id',
+						searchItem: {
+							title: ['in', ['文章']],
+						},
+						condition: 'in'
+					}
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.imgData = res.info.data[0];
+					};
+					console.log(self.mainData)
+					self.$Utils.finishFunc('getImgData');
+				};
+				self.$apis.articleGet(postData, callback);
+			},
 			
 			ZhanTing() {
 				const self = this;
@@ -246,15 +301,16 @@
 				const postData = {};
 				postData.searchItem = {
 					thirdapp_id: 2,
-					type:2,
-					on_shelf:1
+					type:4,
+					on_shelf:1,
+					end_time:['>',Date.parse(new Date())]
 				};
-				postData.paginate = {
+				/* postData.paginate = {
 					count: 0,
 					currentPage: 1,
 					pagesize: 3,
 					is_page: true,
-				};
+				}; */
 				postData.order = {
 					listorder:'desc'
 				};
@@ -318,6 +374,9 @@
 .headBg image{height: 180rpx;}
 .banner .swiper-box{width: 690rpx;height: 300rpx;}
 
+	button::after{
+		border: none;
+	}
 .tt .icon{height: 112rpx!important;width: 112rpx!important;border-radius: 50%;}
 .tt:nth-child(2) .icon{height: 102rpx;width: 122rpx;}
 .tt:nth-child(3) .icon{height: 105rpx;width: 111rpx;}

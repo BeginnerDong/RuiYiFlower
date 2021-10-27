@@ -33,7 +33,8 @@
 			return {
 				articleData:{},
 				searchItem:{
-					thirdapp_id:2
+					thirdapp_id:2,
+					menu_id:1
 				}
 			}
 		},

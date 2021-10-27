@@ -5,18 +5,28 @@
 			<view class="back mt-3" @click="Router.back(1)">
 				<image src="../../static/images/back-icon.png" mode=""></image>
 			</view>
-			<swiper class="swiper-box" indicator-dots="indicatorDots" autoplay="autoplay" interval="3000" indicator-active-color="#FF6F48">
+			<swiper class="swiper-box" indicator-dots="indicatorDots" :autoplay="autoplay"  interval="3000" indicator-active-color="#FF6F48">
 				<block>
 					<swiper-item class="swiper-item" v-for="(item,index) of mainData.bannerImg" :key="index">
-						<image :src="item.url" class="slide-image" />
-					</swiper-item>
+						<image v-if="item.type=='image'" :src="item.url"
+						 mode="slide-image" />
+						<video style="height: 750rpx;width: 750rpx;" id="myVideo" loop  show-play-btn controls @click="ZhanTing"  objectFit="cover" v-if="item.type=='vedio'"
+						 :src="item.url"></video>
+					</swiper-item>			
 				</block>
 			</swiper>
 		</view>
-		
+		<view class="bg-white mb-2 py-2 px-3"  v-if="mainData.type==4">
+			<view class="d-flex a-center font-w" style="color: #FF6740;">
+				<view class="colorM">距结束仅剩:</view>
+				<view class="pl-2">{{mainData.day?mainData.day:'00'}}天</view>
+				<view class="colorM">{{mainData.hourCount?mainData.hourCount:'00'}}:{{mainData.minCount?mainData.minCount:'00'}}:{{mainData.secCount?mainData.secCount:'00'}}</view>
+			</view>
+		</view>
 		<view class="bg-white p-3 d-flex j-sb mb-2">
 			<view class="font-w">
 				<view class="font-32 pb-4">{{mainData.title}}</view>
+				
 				<view class="font-30 price">{{mainData.price}}</view>
 			</view>
 			<view class="text-center">
@@ -51,7 +61,7 @@
 		</view>
 		
 		<view class="p-3 bg-white mb-2">
-			<view class="font-28 color6 pb-3">养花技巧</view>
+			<view class="font-28 color6 pb-3">服务说明</view>
 			<view class="font-24 color2 line-h-md">
 				{{mainData.description}}
 			</view>
@@ -97,8 +107,12 @@
 				<image src="../../static/images/detailsl-icon3.png" class="fh-icon"></image>
 				<view class="font-24 color6 pt-1">首页</view>
 			</view>
-			<view class="btn" v-if="mainData.type==1&&mainData.sell_out==0"  @click="ggShow">加入购物车</view>
-			<view class="btn" :style="mainData.type==2?'width:560rpx':''" v-if="mainData.sell_out==0"  @click="ggShow">立即购买</view>
+			<button class="flex-1 bg-white pt-2" open-type="contact" style="line-height: 1;">
+				<image src="../../static/images/kefu-detail.png" style="width: 40rpx;height: 40rpx;margin: auto;"></image>
+				<view class="font-24 color6" style="padding-top: 3rpx;">客服</view>
+			</button>
+			<view class="btn" style="background-color: #FF6740;" v-if="mainData.type==1&&mainData.sell_out==0"  @click="ggShow">加入购物车</view>
+			<view class="btn" :style="mainData.type==2||mainData.type==4?'width:560rpx':''" v-if="mainData.sell_out==0"  @click="ggShow">立即购买</view>
 			<view class="btn" style="width: 560rpx;background-color: #666;" v-if="mainData.sell_out==1">已售罄</view>
 		</view>
 		
@@ -106,7 +120,7 @@
 		<view class="bg-mask line-h" v-show="gg_show">
 			<view class="radius20-T bg-white p-a bottom-0 left-0 right-0 p-3 d-flex flex-column ggBox">
 				<view class="d-flex j-sb bB-f5 pb-3">
-					<view class="gg radius20 overflow-h"><image :src="mainData.sku[specsCurr]&&mainData.sku[specsCurr].mainImg&&mainData.sku[specsCurr].mainImg[0]
+					<view class="gg radius20 overflow-h" @click="preview()"><image :src="mainData.sku[specsCurr]&&mainData.sku[specsCurr].mainImg&&mainData.sku[specsCurr].mainImg[0]
 					?mainData.sku[specsCurr].mainImg[0].url:''"></image></view>
 					<view class="pl-2 flex-1">
 						<view class="font-36 price pb-3">{{mainData.sku[specsCurr]?mainData.sku[specsCurr].price:''}}</view>
@@ -140,9 +154,10 @@
 				
 				<view class="font-30 colorf text-center d-flex pb-3">
 					<view class="radiusL-4 ggBtn" v-if="mainData.type==1&&mainData.sell_out==0"  @click="addCar">加入购物车</view>
-					<view class="ggBtn" :class="mainData.type==1?'radiusR-4':''" :style="mainData.type==2?'width:690rpx':''"
+					<view class="ggBtn" :class="mainData.type==1?'radiusR-4':''" :style="mainData.type==2||mainData.type==4?'width:690rpx':''"
 					 @click="Utils.stopMultiClick(goBuy)" v-if="mainData.sell_out==0">立即购买</view>
 					 <view class="btn" style="width: 690rpx;background-color: #666;" v-if="mainData.sell_out==1">已售罄</view>
+					 
 				</view>
 			</view>
 		</view>
@@ -151,6 +166,7 @@
 </template>
 
 <script>
+	import Vue from 'vue'
 	export default {
 		
 		data() {
@@ -170,7 +186,8 @@
 				deliver:0,
 				titCard:0,
 				messageData:[],
-				delivery_standard:0
+				delivery_standard:0,
+				autoplay:true
 			}
 		},
 		
@@ -180,7 +197,8 @@
 			self.id = options.id;
 			if (options.user_no) {
 				const callback = (res) => {
-					self.$Utils.loadAll(['getMainData'], self);
+					
+					self.getMainData();
 					self.deliver = uni.getStorageSync('user_info').thirdApp.delivery_fee;
 					self.delivery_standard = uni.getStorageSync('user_info').thirdApp.delivery_standard;
 				};
@@ -190,7 +208,7 @@
 				})
 			} else {
 				const callback = (res) => {
-					self.$Utils.loadAll(['getMainData'], self);
+					self.getMainData();
 					self.deliver = uni.getStorageSync('user_info').thirdApp.delivery_fee;
 					self.delivery_standard = uni.getStorageSync('user_info').thirdApp.delivery_standard;
 				};
@@ -198,6 +216,7 @@
 					refreshToken: true,
 				})
 			}
+			
 		},
 		
 		onShow() {
@@ -235,6 +254,19 @@
 		
 		methods: {
 			
+			preview(){
+				const self = this;
+				uni.previewImage({
+					urls:[self.mainData.sku[self.specsCurr]&&self.mainData.sku[self.specsCurr].mainImg&&self.mainData.sku[self.specsCurr].mainImg[0]
+					?self.mainData.sku[self.specsCurr].mainImg[0].url:'']
+				})
+			},
+			
+			ZhanTing() {
+				const self = this;
+				self.autoplay = !self.autoplay
+			},
+			
 			changeCard(i){
 				const self = this;
 				self.titCard = i;
@@ -252,8 +284,8 @@
 			
 			getMainData() {
 				const self = this;
-				var path = '/pages/goodsDetail/goodsDetail?user_no='+uni.getStorageSync('user_info').user_no+'&id='+self.id;
-				console.log('path',path)
+				/* var path = '/pages/goodsDetail/goodsDetail?user_no='+uni.getStorageSync('user_info').user_no+'&id='+self.id; */
+				/* console.log('path',path) */
 				const postData = {};
 				postData.searchItem = {
 					thirdapp_id:2,
@@ -272,7 +304,39 @@
 				};
 				const callback = (res) => {
 					if (res.info.data.length > 0) {
-						self.mainData = res.info.data[0]
+						self.mainData = res.info.data[0];
+						if(self.mainData.type==4){
+							let time = self.mainData.end_time/1000 - Date.parse(new Date()) / 1000;
+							console.log(time)
+							
+							self.interval = setInterval(function() {
+								time--; //每执行一次让倒计时秒数减一
+								var day = Math.floor( time/ (24*3600) ); // Math.floor()向下取整 
+								var hourCount = Math.floor( (time - day*24*3600) / 3600);
+								var minCount = Math.floor( (time - day*24*3600 - hourCount*3600) /60 );
+								var secCount = time - day*24*3600 - hourCount*3600 - minCount*60; 
+								if (day >= 0 && day <= 9) {
+									day = "0" + day;
+								};
+								if (hourCount >= 0 && hourCount <= 9) {
+									hourCount = "0" + hourCount;
+								}
+								if (minCount >= 0 && minCount <= 9) {
+									minCount = "0" + minCount;
+								}
+								if (secCount >= 0 && secCount <= 9) {
+									secCount = "0" + secCount;
+								}
+								Vue.set(self.mainData,'day',day)
+								Vue.set(self.mainData,'hourCount',hourCount)
+								Vue.set(self.mainData,'minCount',minCount)
+								Vue.set(self.mainData,'secCount',secCount)
+								//如果当秒数小于等于0时 停止计时器 且按钮文字变成重新发送 且按钮变成可用状态 倒计时的秒数也要恢复成默认秒数 即让获取验证码的按钮恢复到初始化状态只改变按钮文字
+								if (time <= 0) {
+									clearInterval(self.interval)
+								}
+							}, 1000);
+						};
 						for(var key in self.mainData.label){
 						  if(self.mainData.sku_array.indexOf(parseInt(key))!=-1){
 						    self.labelData.push(self.mainData.label[key])
@@ -310,7 +374,7 @@
 						self.$Utils.setStorageArray('footData', target, 'id', 999);
 					}
 					self.getMessageData();
-					self.$Utils.finishFunc('getMainData');
+					uni.hideLoading();
 				};
 				self.$apis.productGet(postData, callback);
 			},
@@ -331,7 +395,7 @@
 						self.messageData.push.apply(self.messageData, res.info.data);
 					}
 					console.log('self.messageData', self.messageData)
-					self.$Utils.finishFunc('getMessageData');
+					  
 				};
 				self.$apis.messageGet(postData, callback);
 			},
@@ -377,6 +441,14 @@
 			
 			goBuy(){
 				const self = this;
+				if(self.mainData.type==4&&self.mainData.end_time<Date.parse(new Date())){
+					uni.setStorageSync('canClick',true);
+					self.$Utils.showToast('商品已过购买时间', 'none');
+					setTimeout(function() {
+						self.Router.redirectTo({route:{path:'/pages/index/index'}})
+					}, 1000);
+					return
+				};
 				if(!self.mainData.sku[self.specsCurr]){
 					uni.setStorageSync('canClick',true);
 					self.$Utils.showToast('请选择规格或收货方式', 'none');
@@ -457,7 +529,7 @@
 
 .fh-icon{width: 42rpx;height: 33rpx;margin: auto;}
 .btn{width: 280rpx;line-height: 100rpx;background-color: #333;}
-.btn:nth-child(2){background-color: #FF6740;}
+
 
 .ggBox{min-height: 900rpx;}
 .gg{width: 182rpx;}

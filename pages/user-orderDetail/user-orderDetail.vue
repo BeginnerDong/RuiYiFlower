@@ -36,7 +36,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="d-flex j-end pb-2" v-if="mainData.transport_status==2&&item.isremark==0" :data-id="item.id" @click="Router.navigateTo({route:{path:'/pages/user-orderComment/user-orderComment?id='+$event.currentTarget.dataset.id}})">
+				<view class="d-flex j-end pb-2" v-if="mainData.transport_status==2&&item.isremark==0&&type==''" :data-id="item.id" @click="Router.navigateTo({route:{path:'/pages/user-orderComment/user-orderComment?id='+$event.currentTarget.dataset.id}})">
 					<view class="tkBtn b-e1 radius10">去评论</view>
 				</view>
 			</view>
@@ -95,12 +95,16 @@
 				mainData: {},
 				Utils:this.$Utils,
 				is_hxEwmShow:false,
+				type:''
 			}
 		},
 
 		onLoad(options) {
 			const self = this;
 			self.id = options.id;
+			if(options.type){
+				self.type = options.type
+			};
 			self.$Utils.loadAll(['getMainData'], self);
 			
 		},
@@ -133,9 +137,16 @@
 			getMainData() {
 				const self = this;
 				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
+				if(self.type){
+					postData.tokenFuncName = 'getRiderToken';
+				}else{
+					postData.tokenFuncName = 'getProjectToken';
+				};			
 				postData.searchItem = {
 					id: self.id,
+				};
+				if(self.type){
+					postData.searchItem.user_type = 0
 				};
 				postData.getAfter = {
 					shop: {
