@@ -6,7 +6,7 @@
 			<view class="li" :class="current==3?'on':''" @click="change(3)">已提货</view>
 		</view>
 		
-		<view class="color2 font-24 mx-3 bg-white radius10 mb-2" v-for="(item,index) in mainData" :key="index">
+		<view class="color2 font-24 mx-3 bg-white radius10 mb-2 shadow" v-for="(item,index) in mainData" :key="index">
 			<view class="bB-f5 py-3 px-2 d-flex j-sb a-center">
 
 				<view class="color6">订单编号:{{item.order_no}}</view>

@@ -22,11 +22,10 @@
 		<view class="bg-white mx-3 px-2 mt-2">
 			<view  v-for="(item,index) in mainData.child" :key="index">
 				<view class="py-3 d-flex a-center j-sb">
-					<image :src="item.orderItem&&item.orderItem[0]&&item.orderItem[0].snap_product&&item.orderItem[0].snap_product.product&&
-									item.orderItem[0].snap_product.product.mainImg&&item.orderItem[0].snap_product.product.mainImg[0]?item.orderItem[0].snap_product.product.mainImg[0].url:''"
+					<image :src="item.skuInfo.mainImg&&item.skuInfo.mainImg.length>0?item.skuInfo.mainImg[0].url:''"
 					 class="shopImg radius10"></image>
-					<view class="shopCon d-flex flex-column">
-						<view class="tit avoidOverflow pb-2">{{item.orderItem&&item.orderItem[0]&&item.orderItem[0].snap_product?item.orderItem[0].snap_product.title:''}}</view>
+					<view class="shopCon d-flex flex-column j-sb" style="height:183rpx">
+						<view class="tit avoidOverflow pb-2">{{item.title}}</view>
 						<!-- <view class="d-flex">
 							<view class="font-24 carSpan mb-5 color6 px-1">精品大束</view>
 						</view> -->
@@ -57,6 +56,11 @@
 				<view><text class="red font-28">{{item.behavior==1?'已收':'未收'}}</text></view>
 			</view>
 			
+		</view>
+		
+		<view class="bg-white mx-3 radius10 mt-2 font-28 color2 px-2 d-flex j-sb a-center" v-if="mainData.transport_type==1">
+			<view class="py-3">运费</view>
+			<view class="font-26 colorRsss">￥{{mainData.f_price>0?mainData.f_price:'包邮'}}</view>
 		</view>
 
 		<view class="bg-white mx-3 radius10 mt-2 font-24 color9 px-2 pb-3">

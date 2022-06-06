@@ -13,7 +13,7 @@
 			<view class="right h-100 bg-white flexY flex-column flex-1">
 				<view class="p-3 pb-1 d-flex" v-for="(item,index) in mainData" :key="item.id" :data-id="item.id"
 				@click="Router.navigateTo({route:{path:'/pages/goodsDetail/goodsDetail?id='+$event.currentTarget.dataset.id}})">
-					<image :src="item.mainImg&&item.mainImg[0]?item.mainImg[0].url:''" class="radius10"></image>
+					<image :src="item.mainImg&&item.mainImg[0]?item.mainImg[0].url:''" class="radius10" mode="aspectFill"></image>
 					<view class="pl-2 d-flex flex-column j-sb flex-1">
 						<view class="font-28 color2 avoidOverflow2 tit">{{item.title}}</view>
 						<view class="d-flex j-sb">
@@ -31,7 +31,7 @@
 		
 		
 		<!-- footer -->
-		<view class="footer">
+		<view class="footer" :class="iPhoneX?'D':''">
 			<view class="item" @click="Router.redirectTo({route:{path:'/pages/index/index'}})">
 				<image src="../../static/images/nabar1.png" mode=""></image>
 				<view>首页</view>
@@ -65,6 +65,7 @@
 		data() {
 			return {
 				Router:this.$Router,
+				iPhoneX:false,
 				leftCurr:0,
 				menuData:[],
 				searchItem:{
@@ -79,6 +80,9 @@
 		
 		onLoad(options) {
 			const self = this;
+			if (uni.getStorageSync('isIphoneX')) {
+				self.iPhoneX = true;
+			}
 			self.paginate = self.$Utils.cloneForm(self.$AssetsConfig.paginate);
 			if(options.index||options.index==0){
 				self.index = options.index

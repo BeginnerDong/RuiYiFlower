@@ -26,9 +26,10 @@
 				</view>
 				<view class="d-flex j-sb a-center p-2 bB-f5" :data-id="item.id" @click="Router.navigateTo({route:{path:'/pages/user-orderDetail/user-orderDetail?id='+$event.currentTarget.dataset.id}})">
 					<view class="d-flex a-center">
-						<image v-for="(c_item,c_index) in item.child" :key="c_index" :src="c_item.orderItem&&c_item.orderItem[0]&&c_item.orderItem[0].snap_product&&c_item.orderItem[0].snap_product.product&&
-								c_item.orderItem[0].snap_product.product.mainImg&&c_item.orderItem[0].snap_product.product.mainImg[0]?c_item.orderItem[0].snap_product.product.mainImg[0].url:''"
-						 class="orderImg"></image>
+						<view v-for="(c_item,c_index) in item.child" :key="c_index">
+							<image  class="orderImg" mode="aspectFill"
+							:src="c_item.skuInfo.mainImg&&c_item.skuInfo.mainImg.length>0?c_item.skuInfo.mainImg[0].url:''" ></image>
+						</view>
 					</view>
 					<image src="../../static/images/detailsl-icon2.png" class="R-icon m-2" 
 					></image>
@@ -69,9 +70,10 @@
 				</view>
 				<view class="d-flex j-sb a-center p-2 bB-f5" :data-id="item.id" @click="Router.navigateTo({route:{path:'/pages/user-orderDetail/user-orderDetail?id='+$event.currentTarget.dataset.id}})">
 					<view class="d-flex a-center">
-						<image v-for="(c_item,c_index) in item.child" :key="c_index" :src="c_item.orderItem&&c_item.orderItem[0]&&c_item.orderItem[0].snap_product&&c_item.orderItem[0].snap_product.product&&
-								c_item.orderItem[0].snap_product.product.mainImg&&c_item.orderItem[0].snap_product.product.mainImg[0]?c_item.orderItem[0].snap_product.product.mainImg[0].url:''"
-						 class="orderImg"></image>
+						<view v-for="(c_item,c_index) in item.child" :key="c_index">
+							<image  class="orderImg" mode="aspectFill"
+							:src="c_item.skuInfo.mainImg&&c_item.skuInfo.mainImg.length>0?c_item.skuInfo.mainImg[0].url:''" ></image>
+						</view>
 					</view>
 					<image src="../../static/images/detailsl-icon2.png" class="R-icon"></image>
 				</view>
@@ -111,9 +113,10 @@
 				</view>
 				<view class="d-flex j-sb a-center p-2 bB-f5" :data-id="item.id" @click="Router.navigateTo({route:{path:'/pages/user-orderDetail/user-orderDetail?id='+$event.currentTarget.dataset.id}})">
 					<view class="d-flex a-center">
-						<image v-for="(c_item,c_index) in item.child" :key="c_index" :src="c_item.orderItem&&c_item.orderItem[0]&&c_item.orderItem[0].snap_product&&c_item.orderItem[0].snap_product.product&&
-								c_item.orderItem[0].snap_product.product.mainImg&&c_item.orderItem[0].snap_product.product.mainImg[0]?c_item.orderItem[0].snap_product.product.mainImg[0].url:''"
-						 class="orderImg"></image>
+						<view v-for="(c_item,c_index) in item.child" :key="c_index">
+							<image  class="orderImg" mode="aspectFill"
+							:src="c_item.skuInfo.mainImg&&c_item.skuInfo.mainImg.length>0?c_item.skuInfo.mainImg[0].url:''" ></image>
+						</view>
 					</view>
 					<image src="../../static/images/detailsl-icon2.png" class="R-icon"></image>
 				</view>

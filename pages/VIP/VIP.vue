@@ -18,7 +18,9 @@
 				</view>
 			</view>
 			
-			<button class="lq font-26 radiusR-1" style="text-align: inherit;" v-if="userData.behavior!=1" open-type="getUserInfo" @getuserinfo="Utils.stopMultiClick(submit)">领取会员</button>
+			<button class="lq font-26 radiusR-1" style="text-align: inherit;" v-if="userData.behavior!=1&&!userData.info.phone" 
+			open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">领取会员</button>
+			<button class="lq font-26 radiusR-1" style="text-align: inherit;" v-if="userData.behavior!=1&&userData.info.phone" @click="userUpdate()">领取会员</button>
 			<!-- 非会员 -->
 			<view class="p-r noVip" v-if="userData.behavior!=1">
 				<image src="../../static/images/vip-icon7.png" ></image>
@@ -109,8 +111,9 @@
 		
 		
 		
+		<view :style="iPhoneX?'height: 170rpx;':'height: 130rpx'"></view>
 		<!-- footer -->
-		<view class="footer">
+		<view class="footer" :class="iPhoneX?'D':''">
 			<view class="item" @click="Router.redirectTo({route:{path:'/pages/index/index'}})">
 				<image src="../../static/images/nabar1.png" mode=""></image>
 				<view>首页</view>
@@ -144,6 +147,7 @@
 		data() {
 			return {
 				Router:this.$Router,
+				iPhoneX:false,
 				showAll:false,
 				userData:{},
 				Utils:this.$Utils,
@@ -155,6 +159,9 @@
 		
 		onLoad() {
 			const self = this;
+			if (uni.getStorageSync('isIphoneX')) {
+				self.iPhoneX = true;
+			}
 			if(uni.getStorageSync('user_token')){
 				const callback = (res) => {
 					
@@ -166,6 +173,7 @@
 			}else{
 				self.showAll = true
 			}
+			self.getUserData();
 		},
 		
 		onShow() {
@@ -178,6 +186,30 @@
 		},
 		
 		methods: {
+			
+			getPhoneNumber(e) {
+				const self = this;
+				console.log('e', e);
+				if (e.detail.errMsg == 'getPhoneNumber:fail user deny') {
+					return
+				};
+				uni.showLoading();
+				const postData = {
+					appid: uni.getStorageSync('user_info').thirdApp.appid,
+					config_id: 1,
+					thirdapp_id: 2,
+					encryptedData: e.detail.encryptedData,
+					iv: e.detail.iv
+				};
+				postData.tokenFuncName = 'getProjectToken';
+				const callback = (res) => {
+					if (res.solely_code == 100000) {
+						self.userPhone = res.info.phoneNumber;
+						self.userUpdate();
+					};
+				}
+				self.$apis.decryptWxInfo(postData, callback)
+			},
 			
 			zxShow(i){
 				const self = this;
@@ -238,6 +270,16 @@
 				postData.searchItem = {
 					user_no:uni.getStorageSync('user_info').user_no
 				};
+				postData.saveAfter = [{
+					tableName:'UserInfo',
+					FuncName:'update',
+					data:{
+						phone:self.userPhone
+					},
+					searchItem:{
+						user_no:uni.getStorageSync('user_info').user_no
+					}
+				}]
 				const callback = (res) => {
 					if (res.solely_code==100000) {
 						self.$Utils.showToast('领取成功','none');

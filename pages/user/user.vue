@@ -15,7 +15,7 @@
 			</view>
 			<view class="p-r p-3 color2 font-24 line-h d-flex" style="padding-top: 60rpx;padding-bottom: 60rpx;justify-content: center;" v-if="userData.nickname==''">
 				<button style="padding: 0 10px;font-size: 13px;background-color: #fff;color: #FF6F48;height: 25px;line-height: 25px;"
-				v-if="userData.nickname==''" open-type="getUserInfo" @getuserinfo="Utils.stopMultiClick(submit)">点击获取头像</button>
+				v-if="userData.nickname==''" @click="submit">点击获取头像</button>
 			</view>
 			<view class="bg-black mx-4  p-3 pb-5 p-r colorG font-32 d-flex j-sb a-center radius20-T yy"  @click="Router.navigateTo({route:{path:'/pages/user-surplus/user-surplus'}})">
 				<view class="d-flex a-center" v-if="userData.behavior==1">{{userData.info?userData.info.balance:0}}<text class="font-22 pl-1">(余额)</text></view>
@@ -103,8 +103,9 @@
 		
 		
 		
+		<view :style="iPhoneX?'height: 170rpx;':'height: 130rpx'"></view>
 		<!-- footer -->
-		<view class="footer">
+		<view class="footer" :class="iPhoneX?'D':''">
 			<view class="item" @click="Router.redirectTo({route:{path:'/pages/index/index'}})">
 				<image src="../../static/images/nabar1.png" mode=""></image>
 				<view>首页</view>
@@ -138,6 +139,7 @@
 		data() {
 			return {
 				Router:this.$Router,
+				iPhoneX:false,
 				showAll:false,
 				userData:{},
 				Utils:this.$Utils,
@@ -147,6 +149,9 @@
 		
 		onLoad() {
 			const self = this;
+			if (uni.getStorageSync('isIphoneX')) {
+				self.iPhoneX = true;
+			}
 			if(uni.getStorageSync('user_token')){
 				self.$Utils.loadAll(['getUserData'], self);
 			}else{
@@ -186,8 +191,17 @@
 				const self = this;
 				uni.setStorageSync('canClick', false);
 				const callback = (user, res) => {
-					console.log(res)
-					self.getUserData();
+					console.log('用户',user,res)
+					self.$apis.userUpdate({
+						data:{
+							headImgUrl:user.avatarUrl,
+							nickname:user.nickName
+						},
+						tokenFuncName:'getProjectToken'
+					}, function(){
+						self.getUserData();
+					});
+					
 				};
 				self.$Utils.getAuthSetting(callback);
 			},

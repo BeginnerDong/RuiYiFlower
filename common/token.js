@@ -35,7 +35,7 @@ class Token {
 		if(uni.getStorageSync('token_expire_time')&&parseInt(uni.getStorageSync('token_expire_time'))<parseInt(new Date().getTime())){
 			pass = false;
 		};
-		console.log('new Date().getTime()',parseInt(new Date().getTime()));
+		// console.log('new Date().getTime()',parseInt(new Date().getTime()));
 		if(!pass){
 	        var params = {
 	            thirdapp_id:2,
@@ -43,7 +43,7 @@ class Token {
 				info_name:'user_info',
 				token_name:'user_token'
 	        };
-			console.log('getProjectToken',callback)
+			// console.log('getProjectToken',callback)
 			if(postData&&postData.parent_no){
 				params.parent_no = postData.parent_no
 			};
@@ -58,14 +58,14 @@ class Token {
 	}
 	
 	getWeixinToken(params,callback){
-		console.log('getWeixinToken',callback)
+		// console.log('getWeixinToken',callback)
 		var orginHref =  window.location.origin + window.location.pathname;
 		//var href = 'http://test.solelycloud.com/gouxuanweb/'
 	
         var param = $Utils.getHashParameters()[0];
         var hash = $Utils.getHashParameters()[1]; 
-		console.log('param',param)
-		console.log('hash',hash);
+		// console.log('param',param)
+		// console.log('hash',hash);
 		if(JSON.stringify(param)!='{}'){
 			var href = orginHref +'?';
 			Object.keys(param).forEach(function(key){
@@ -82,9 +82,9 @@ class Token {
         if(param.code){
 			if(param.sub_appid&&param.sub_appsecret&&!param.sub_code){
 				href = href + '&sub_code=' + param.code   + hash; 	
-				console.log('href',href);
-				console.log('param',param);
-				console.log('hash',hash);
+				// console.log('href',href);
+				// console.log('param',param);
+				// console.log('hash',hash);
 				//return;
 				var time = uni.getStorageSync('token_get_time');
 				if(time){
@@ -332,14 +332,14 @@ class Token {
                 }
             });
         };
-        console.log(wxUserInfo)
+        // console.log(wxUserInfo)
     }
 
 
     getTokenFromServer(wxUserInfo,params,callback) {
         var self  = this;
-        console.log('params',params);
-        console.log('wxUserInfo',params);
+        // console.log('params',params);
+        // console.log('wxUserInfo',params);
 		var time = uni.getStorageSync('token_get_time');
 		if(time){
 			time++
@@ -349,7 +349,7 @@ class Token {
 		uni.setStorageSync('token_get_time',time);
         uni.login({
             success: function (res) {
-                console.log(res)
+                // console.log(res)
                 var postData = {};
                 postData.thirdapp_id = params.thirdapp_id;  
                 
@@ -374,7 +374,7 @@ class Token {
                 if(uni.getStorageSync('openidP')){
                     postData.openid = uni.getStorageSync('openidP');
                 };
-                console.log('postData',postData)
+                // console.log('postData',postData)
                 uni.request({
                     url: config.baseUrl+'/Base/ProgramToken/get',
                     method:'POST',

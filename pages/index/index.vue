@@ -1,8 +1,17 @@
 <template>
 	<view>
+		<!-- 搜索 -->
+		<view class="flex1 pt-3 mx-3 p-r " style="z-index: 100;" 
+		@click="Router.navigateTo({route:{path:'/pages/search/search'}})">
+			<view class="d-flex radius30 py-2 w-100" style="background-color: rgba(255,255,255,0.5);">
+				<image class="mx-2" src="../../static/images/search.png" style="width: 30rpx;height: 30rpx;" mode=""></image>
+				<view class="color6 font-24">搜索您想要搜索的商品</view>
+			</view>
+		</view>
+		
 		<!-- banner -->
-		<view class="banner radius20 overflow-h mx-3 mt-2">
-			<view class="headBg p-a top-0 left-0 right-0"><image src="../../static/images/about-icon13.png" mode=""></image></view>
+		<view class="banner radius20 overflow-h mx-3 mt-3">
+			<view class="headBg p-a top-0 left-0 right-0"><image src="../../static/images/about-icon13.png" mode="widthFix"></image></view>
 			<swiper class="swiper-box" indicator-dots="indicatorDots" :autoplay="autoplay" interval="3000" indicator-active-color="#FF6F48">
 				<block>
 					<swiper-item class="swiper-item"  v-for="(item,index) in sliderData.mainImg" :key="index">
@@ -31,7 +40,7 @@
 			</view>
 		</view>
 		<view class="mt-3 mx-3" @click="Router.navigateTo({route:{path:'/pages/article/article'}})">
-			<image style="height: 160rpx;" :src="imgData.mainImg&&imgData.mainImg[0]?imgData.mainImg[0].url:''"></image>
+			<image style="height: 160rpx;" :src="imgData.mainImg&&imgData.mainImg[0]?imgData.mainImg[0].url:''" mode="aspectFill"></image>
 		</view>
 		<!-- 热门专区 -->
 		<view class="line-h font-32 color2 mt-3 mb-3 mx-3 Tit">热卖专区</view>
@@ -70,9 +79,11 @@
 		<button class="p-f" open-type="contact" style="right: 2%;bottom: 20%;border-radius: 50%;overflow: hidden;">
 			<image src="../../static/images/kefu-index.png" style="width: 80rpx;height: 80rpx;"></image>
 		</button>
-		<view style="height: 130rpx;"></view>
+		
+		
+		<view :style="iPhoneX?'height: 170rpx;':'height: 130rpx'"></view>
 		<!-- footer -->
-		<view class="footer">
+		<view class="footer" :class="iPhoneX?'D':''">
 			<view class="item on" @click="Router.redirectTo({route:{path:'/pages/index/index'}})">
 				<image src="../../static/images/nabar1-a.png" mode=""></image>
 				<view>首页</view>
@@ -101,11 +112,14 @@
 </template>
 
 <script>
+	const app = getApp();
 	export default {
 		data() {
 			return {
 				Router:this.$Router,
 				Utils:this.$Utils,
+				statusBar: app.globalData.statusBar,
+				iPhoneX:false,
 				is_show: false,
 				menuData:[],
 				sliderData:{},
@@ -121,7 +135,9 @@
 		
 		onLoad() {
 			const self = this;
-			
+			if (uni.getStorageSync('isIphoneX')) {
+				self.iPhoneX = true;
+			}
 			self.$Utils.loadAll(['getMenuData','getSliderData','getHotData','getNewData','getMonthData','getUserData','getImgData','getImg2Data'], self);
 		},
 		

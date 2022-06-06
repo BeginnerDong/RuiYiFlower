@@ -132,7 +132,7 @@
 				</view>
 				
 				<view class="flex-1 flexY flex-column mb-3 ggPartBox">
-					<view class="ggPart bB-f5 pb-1" v-for="(item,index) in labelData" :key="index">
+					<view class="ggPart bB-f5 pb-1" v-for="(item,index) in labelData" :key="index" v-if="item.id!=99">
 						<view class="font-26 color2 py-3">{{item.title}}</view>
 						<view class="font-24 color6">
 							<view class="span"  v-for="(c_item,c_index) in item.children" 
@@ -485,6 +485,7 @@
 					self.$Utils.showToast('请选择规格或收货方式', 'none');
 					return
 				};
+				self.gg_show = false;
 				var obj = self.mainData;
 				if(self.$Utils.inArray(100,self.mainData.sku[self.specsCurr].sku_item)!=-1){
 					self.mainData.transport_type = 0

@@ -37,28 +37,19 @@ export default {
 	},
 	
 	getAuthSetting(callback) {
-		wx.getSetting({
+		uni.getSetting({
 			success: setting => {
-				if (!setting.authSetting['scope.userInfo']) {
-					wx.hideLoading();
-					uni.setStorageSync('canClick', true);
-					this.showToast('授权请点击同意', 'none');
-				} else {
-					uni.getUserInfo({
-						provider: 'weixin',
-						success: function(infoRes) {
-							console.log('-------获取微信用户所有-----');
-							console.log(JSON.stringify(infoRes.userInfo));
-							callback && callback(infoRes.userInfo, setting);
-						}
-					});
-	
-					/* wx.getUserInfo({
-						success: function(user) {
-							
-						}
-					}); */
-				};
+				uni.getUserProfile({
+				    desc: '瑞意鲜花', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+				    success: (res) => {
+						console.log('-------获取微信用户所有-----');
+						console.log('用户信息',res)
+						callback && callback(res.userInfo, setting);
+				    },
+					fail:(res) =>{
+						console.log('用户信息',res)
+					}
+				})
 			}
 		});
 	},

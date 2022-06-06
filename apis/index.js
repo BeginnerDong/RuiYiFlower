@@ -3,12 +3,51 @@ import config from "@/config/index.config.js";
 
 
 export default {
+	
+	//获取手机号
+	decryptWxInfo(param, callback) {
+	
+		var allParams = {
+			url: 'Func/Common/decryptWxInfo',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	getShortPath(param, callback) {
 
+		var allParams = {
+			url: 'Project/Solely/getShortPath',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
 
 	WxJssdk(param, callback) {
 
 		var allParams = {
 			url: 'WxJssdk',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+
+	getOtherUser(param, callback) {
+
+		var allParams = {
+			url: 'Project/Solely/getOtherUser',
 			type: 'post',
 			data: param,
 			sCallback: function(data) {

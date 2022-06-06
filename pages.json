@@ -167,6 +167,15 @@
 							"navigationBarTitleText": "评论"
 						}
         }
+        ,{
+            "path" : "pages/search/search",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "搜索",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		//"navigationStyle":"custom",
